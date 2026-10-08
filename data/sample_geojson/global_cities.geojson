@@ -3,28 +3,6 @@
   "features": [
     {
       "type": "Feature",
-      "id": "dhaka",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          90.4125,
-          23.8103
-        ]
-      },
-      "properties": {
-        "id": "dhaka",
-        "name": "Dhaka",
-        "country": "Bangladesh",
-        "lat": 23.8103,
-        "lng": 90.4125,
-        "zoom": 12,
-        "baseline_lst": 38.5,
-        "baseline_ndvi": 0.18,
-        "baseline_risk": 82
-      }
-    },
-    {
-      "type": "Feature",
       "id": "khulna",
       "geometry": {
         "type": "Point",
@@ -34,15 +12,23 @@
         ]
       },
       "properties": {
-        "id": "khulna",
         "name": "Khulna",
-        "country": "Bangladesh",
-        "lat": 22.8456,
-        "lng": 89.5403,
-        "zoom": 13,
-        "baseline_lst": 35.2,
-        "baseline_ndvi": 0.28,
-        "baseline_risk": 71
+        "country": "Bangladesh"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dhaka",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          90.4125,
+          23.8103
+        ]
+      },
+      "properties": {
+        "name": "Dhaka",
+        "country": "Bangladesh"
       }
     },
     {
@@ -56,59 +42,8 @@
         ]
       },
       "properties": {
-        "id": "phoenix",
         "name": "Phoenix",
-        "country": "United States",
-        "lat": 33.4484,
-        "lng": -112.074,
-        "zoom": 11,
-        "baseline_lst": 44.8,
-        "baseline_ndvi": 0.12,
-        "baseline_risk": 89
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "nairobi",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          36.8219,
-          -1.2921
-        ]
-      },
-      "properties": {
-        "id": "nairobi",
-        "name": "Nairobi",
-        "country": "Kenya",
-        "lat": -1.2921,
-        "lng": 36.8219,
-        "zoom": 12,
-        "baseline_lst": 31.4,
-        "baseline_ndvi": 0.35,
-        "baseline_risk": 58
-      }
-    },
-    {
-      "type": "Feature",
-      "id": "cairo",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          31.2357,
-          30.0444
-        ]
-      },
-      "properties": {
-        "id": "cairo",
-        "name": "Cairo",
-        "country": "Egypt",
-        "lat": 30.0444,
-        "lng": 31.2357,
-        "zoom": 11,
-        "baseline_lst": 41.2,
-        "baseline_ndvi": 0.09,
-        "baseline_risk": 86
+        "country": "United States"
       }
     }
   ]

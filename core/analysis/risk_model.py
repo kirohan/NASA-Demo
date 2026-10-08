@@ -42,14 +42,16 @@ class ClimateRiskModel:
         score = round(float(np.clip(score, 0.0, 100.0)), 1)
 
         reasons = []
-        if s_lst >= 65:
-            reasons.append(f"Elevated Land Surface Temperature ({surface_temp_c:.1f}°C) driving high urban thermal stress")
-        if s_veg >= 65:
-            reasons.append(f"Severe vegetation canopy deficit (mean NDVI: {ndvi:.2f}) with insufficient vegetative cooling")
-        if s_urb >= 60:
-            reasons.append(f"High impervious surface density (NDBI: {ndbi:.2f}) exacerbating heat retention")
-        if s_pop >= 60:
-            reasons.append(f"High population exposure density ({int(pop_density):,} residents/km²)")
+        if s_lst >= 60:
+            reasons.append(f"High surface temperature ({surface_temp_c:.1f}°C) driving urban thermal stress")
+        if s_veg >= 60:
+            reasons.append(f"Vegetation canopy deficit (mean NDVI: {ndvi:.2f}) with limited evaporative cooling")
+        if s_urb >= 55:
+            reasons.append(f"Dense impervious construction (NDBI: {ndbi:.2f}) retaining solar heat")
+        if s_pop >= 55:
+            reasons.append(f"Dense population exposure ({int(pop_density):,} residents/km²)")
+        if s_elev >= 70:
+            reasons.append(f"Low deltaic elevation ({elevation_m:.1f}m ASL) prone to heat stagnation & drainage stress")
         if not reasons:
             reasons.append("Balanced environmental indicators with moderate canopy cover and low thermal anomaly.")
 

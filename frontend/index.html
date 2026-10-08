@@ -10,10 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css?v=2.5">
 </head>
 <body>
     <div class="app-container">
+        <!-- Top Navigation -->
         <header class="navbar">
             <div class="brand">
                 <div class="logo-icon"><i class="fa-solid fa-satellite"></i></div>
@@ -28,8 +29,8 @@
                 <div class="control-group">
                     <label for="citySelect"><i class="fa-solid fa-city"></i> Focus City:</label>
                     <select id="citySelect" class="styled-select">
-                        <option value="dhaka" selected>Dhaka, Bangladesh</option>
-                        <option value="khulna">Khulna, Bangladesh</option>
+                        <option value="khulna" selected>Khulna, Bangladesh</option>
+                        <option value="dhaka">Dhaka, Bangladesh</option>
                         <option value="phoenix">Phoenix, USA</option>
                         <option value="nairobi">Nairobi, Kenya</option>
                         <option value="cairo">Cairo, Egypt</option>
@@ -37,8 +38,12 @@
                 </div>
 
                 <div class="coordinate-display" id="coordDisplay">
-                    <i class="fa-solid fa-crosshairs"></i> Lat: <span id="dispLat">23.810</span>, Lng: <span id="dispLng">90.413</span>
+                    <i class="fa-solid fa-crosshairs"></i> Lat: <span id="dispLat">22.846</span>, Lng: <span id="dispLng">89.540</span>
                 </div>
+
+                <a id="btnExportKML" href="/api/export/kml?lat=22.8456&lng=89.5403&city_id=khulna" class="btn btn-secondary" title="Open 3D Layer in Google Earth Pro">
+                    <i class="fa-solid fa-earth-americas"></i> Google Earth 3D (.kml)
+                </a>
 
                 <button id="btnAnalyze" class="btn btn-primary">
                     <i class="fa-solid fa-chart-pie"></i> Analyze Location
@@ -46,53 +51,99 @@
             </div>
         </header>
 
+        <!-- Main Dashboard -->
         <main class="dashboard-body">
             <div class="map-wrapper">
                 <div id="map"></div>
 
+                <!-- Floating Layer & Map Controller -->
                 <div class="layer-control-card glass-panel">
                     <div class="card-header">
-                        <h4><i class="fa-solid fa-layer-group"></i> Satellite Layers</h4>
-                        <span class="pulse-indicator">LIVE EO</span>
+                        <h4><i class="fa-solid fa-layer-group"></i> GIS Controls</h4>
+                        <span class="pulse-indicator">CLEAR EO</span>
                     </div>
+
+                    <!-- Watermark-Free High-Detail Basemaps -->
+                    <div class="basemap-selector-row">
+                        <label for="basemapSelect"><i class="fa-solid fa-map"></i> Basemap View:</label>
+                        <select id="basemapSelect" class="styled-select-sm">
+                            <option value="googleHybrid" selected>🛰️ Google Hybrid (Satellite + Roads & Rivers)</option>
+                            <option value="osm">🗺️ OpenStreetMap (Detailed Street & Ward Names)</option>
+                            <option value="esriSatellite">🛰️ NASA / Esri World Satellite</option>
+                            <option value="topo">🏔️ Topographic Physical Map</option>
+                        </select>
+                    </div>
+
+                    <div class="divider-sm"></div>
+
+                    <!-- Single Active Environmental Layer (Radios) -->
+                    <div class="layer-subheading">Environmental Layer:</div>
                     <div class="layer-list">
-                        <label class="layer-checkbox">
-                            <input type="checkbox" id="chkHeat" checked>
-                            <span class="checkmark heat-check"></span>
+                        <label class="layer-radio">
+                            <input type="radio" name="envLayer" id="radHeat" value="heat" checked>
+                            <span class="radio-mark heat-radio"></span>
                             <span class="layer-label">
-                                <strong>Urban Heat Map</strong>
-                                <small>Landsat 8/9 TIRS & MOD11A2</small>
+                                <strong>Urban Heat Map (LST)</strong>
+                                <small>Smooth Thermal Gradient • River Masked</small>
                             </span>
                         </label>
 
-                        <label class="layer-checkbox">
-                            <input type="checkbox" id="chkVegetation">
-                            <span class="checkmark veg-check"></span>
+                        <label class="layer-radio">
+                            <input type="radio" name="envLayer" id="radVeg" value="vegetation">
+                            <span class="radio-mark veg-radio"></span>
                             <span class="layer-label">
                                 <strong>Vegetation Health (NDVI)</strong>
-                                <small>Sentinel-2 & MOD13Q1</small>
+                                <small>Canopy Density • Sentinel-2</small>
                             </span>
                         </label>
 
-                        <label class="layer-checkbox">
-                            <input type="checkbox" id="chkChange">
-                            <span class="checkmark change-check"></span>
+                        <label class="layer-radio">
+                            <input type="radio" name="envLayer" id="radChange" value="change">
+                            <span class="radio-mark change-radio"></span>
                             <span class="layer-label">
-                                <strong>Urban Change (2015-2025)</strong>
-                                <small>Delta NDBI & Canopy Loss</small>
+                                <strong>Urban Change (2015–2026)</strong>
+                                <small>Delta NDBI vs. Canopy Loss</small>
                             </span>
                         </label>
 
+                        <label class="layer-radio">
+                            <input type="radio" name="envLayer" id="radNone" value="none">
+                            <span class="radio-mark none-radio"></span>
+                            <span class="layer-label">
+                                <strong>Clean View (Satellite Only)</strong>
+                                <small>Pure Satellite & Vector Boundaries</small>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="divider-sm"></div>
+
+                    <!-- Boundary Overlay -->
+                    <div class="layer-list">
                         <label class="layer-checkbox">
                             <input type="checkbox" id="chkWards" checked>
                             <span class="checkmark ward-check"></span>
                             <span class="layer-label">
                                 <strong>Administrative Zones</strong>
-                                <small>Ward / District Boundaries</small>
+                                <small>Khulna City Corporation Sectors</small>
                             </span>
                         </label>
                     </div>
 
+                    <!-- Layer Opacity Slider -->
+                    <div class="opacity-container">
+                        <div class="opacity-header">
+                            <span><i class="fa-solid fa-sliders"></i> Overlay Transparency:</span>
+                            <span id="opacityVal">45%</span>
+                        </div>
+                        <input type="range" id="opacitySlider" min="10" max="90" value="45" class="styled-slider">
+                        <div class="opacity-labels">
+                            <span>See Satellite Map</span>
+                            <span>See Heat Grid</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Legend -->
                     <div class="legend-container" id="mapLegend">
                         <div class="legend-title" id="legendTitle">Urban Heat Island (LST °C)</div>
                         <div class="legend-scale" id="legendScale">
@@ -107,22 +158,92 @@
                     </div>
                 </div>
 
+                <!-- NEW: Interactive Historical Timeline Slider Bar -->
+                <div class="timeline-bar-card glass-panel">
+                    <div class="timeline-header">
+                        <div class="timeline-title">
+                            <i class="fa-solid fa-clock-rotate-left text-cyan"></i>
+                            <strong>Historical Satellite Timeline</strong>
+                            <small id="timelineSub">Observe urban transformation from 2015 to 2026</small>
+                        </div>
+                        <div class="timeline-controls">
+                            <button id="btnPlayTimeline" class="btn btn-timeline-play">
+                                <i class="fa-solid fa-play"></i> <span>Play</span>
+                            </button>
+                            <span class="active-year-badge" id="displayActiveYear">2026</span>
+                        </div>
+                    </div>
+                    <div class="timeline-slider-wrapper">
+                        <input type="range" id="timelineSlider" min="2015" max="2026" value="2026" step="1" class="timeline-slider">
+                        <div class="timeline-ticks">
+                            <span class="tick" data-year="2015">2015</span>
+                            <span class="tick" data-year="2017">2017</span>
+                            <span class="tick" data-year="2019">2019</span>
+                            <span class="tick" data-year="2021">2021</span>
+                            <span class="tick" data-year="2023">2023</span>
+                            <span class="tick" data-year="2025">2025</span>
+                            <span class="tick tick-now" data-year="2026">2026 (Now)</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="map-hint-banner">
-                    <i class="fa-solid fa-mouse-pointer"></i> Click any point or administrative polygon on the map to trigger deep satellite analysis.
+                    <i class="fa-solid fa-mouse-pointer"></i> Click any sector polygon or scrub the 2015–2026 Timeline Slider to observe historical urban change.
                 </div>
             </div>
 
+            <!-- Right Telemetry Panel -->
             <aside class="sidebar-panel glass-panel">
                 <div class="sidebar-header">
                     <div class="area-badge">
                         <i class="fa-solid fa-location-dot"></i>
-                        <span id="activeAreaTitle">Dhaka Metropolitan Area</span>
+                        <span id="activeAreaTitle">Khulna Resilience Zone</span>
                     </div>
                     <div class="eo-status">
-                        <i class="fa-solid fa-circle-check text-success"></i> Calibrated
+                        <span id="badgeYearDisplay" class="pulse-indicator">2026 EO</span>
                     </div>
                 </div>
 
+                <!-- Map Area & Land Cover Intelligence Card -->
+                <section class="area-intelligence-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-ruler-combined"></i> Map Area & Land Cover Breakdown
+                    </div>
+                    <div class="area-metric-box">
+                        <div class="area-highlight-row">
+                            <span class="area-total-label">Total Analyzed Area:</span>
+                            <span class="area-total-val" id="dispTotalArea">100.0 km² <small>(10,000 ha)</small></span>
+                        </div>
+                        <div class="area-bars-grid">
+                            <div class="area-bar-item">
+                                <div class="area-bar-header">
+                                    <span><i class="fa-solid fa-building text-pink"></i> Built-Up Concrete</span>
+                                    <strong id="dispBuiltUpArea">64.5 km² (64.5%)</strong>
+                                </div>
+                                <div class="area-progress"><div class="area-bar-fill fill-pink" id="barBuiltUp" style="width: 64.5%;"></div></div>
+                            </div>
+                            <div class="area-bar-item">
+                                <div class="area-bar-header">
+                                    <span><i class="fa-solid fa-tree text-green"></i> Vegetated Canopy</span>
+                                    <strong id="dispGreenArea">26.0 km² (26.0%)</strong>
+                                </div>
+                                <div class="area-progress"><div class="area-bar-fill fill-green" id="barGreen" style="width: 26%;"></div></div>
+                            </div>
+                            <div class="area-bar-item">
+                                <div class="area-bar-header">
+                                    <span><i class="fa-solid fa-water text-cyan"></i> River & Water</span>
+                                    <strong id="dispWaterArea">9.5 km² (9.5%)</strong>
+                                </div>
+                                <div class="area-progress"><div class="area-bar-fill fill-cyan" id="barWater" style="width: 9.5%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="zone-landmark-note" id="dispZoneNote">
+                            <i class="fa-solid fa-map-pin"></i> <strong>Selected Sector:</strong> <span id="dispZoneLandmarks">Khulna Sadar, Picture Palace, Bhairab Riverfront</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Current Conditions Metrics Grid -->
                 <section class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-icon thermal-icon">
@@ -130,9 +251,9 @@
                         </div>
                         <div class="metric-data">
                             <div class="metric-label">Land Surface Temp</div>
-                            <div class="metric-value" id="valTemperature">38.5 <small>°C</small></div>
+                            <div class="metric-value" id="valTemperature">36.4 <small>°C</small></div>
                             <div class="metric-sub" id="valHeatRisk">
-                                <span class="badge badge-high">High Heat Stress</span>
+                                <span class="badge badge-high">High Heat Load (+3.4°C UHI)</span>
                             </div>
                         </div>
                     </div>
@@ -143,9 +264,9 @@
                         </div>
                         <div class="metric-data">
                             <div class="metric-label">Vegetation Health (NDVI)</div>
-                            <div class="metric-value" id="valNdvi">0.18 <small>NDVI</small></div>
+                            <div class="metric-value" id="valNdvi">0.24 <small>NDVI</small></div>
                             <div class="metric-sub" id="valGreenCoverage">
-                                <span class="badge badge-warning">Canopy Deficit: 82%</span>
+                                <span class="badge badge-warning">Canopy Deficit: 74%</span>
                             </div>
                         </div>
                     </div>
@@ -155,15 +276,16 @@
                             <i class="fa-solid fa-city"></i>
                         </div>
                         <div class="metric-data">
-                            <div class="metric-label">Urban Expansion (10-Yr)</div>
-                            <div class="metric-value" id="valUrbanChange">+35.2 <small>%</small></div>
+                            <div class="metric-label">Urban Expansion (vs. 2015)</div>
+                            <div class="metric-value" id="valUrbanChange">+32.5 <small>%</small></div>
                             <div class="metric-sub" id="valCanopyLoss">
-                                <span class="badge badge-danger">Canopy: -18.4%</span>
+                                <span class="badge badge-danger">Canopy: -16.4%</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
+                <!-- Climate Risk & Resilience Score -->
                 <section class="resilience-score-section">
                     <div class="section-title">
                         <i class="fa-solid fa-shield-halved"></i> Climate Risk & Resilience Score
@@ -171,36 +293,51 @@
                     <div class="score-card">
                         <div class="score-radial-wrapper">
                             <div class="score-circle" id="scoreCircle">
-                                <div class="score-number" id="riskScoreVal">82</div>
+                                <div class="score-number" id="riskScoreVal">78</div>
                                 <div class="score-denom">/ 100</div>
                             </div>
                         </div>
                         <div class="score-details">
                             <div class="score-tier" id="riskTierBadge">
-                                <span class="badge badge-extreme">Risk Level: Extreme</span>
+                                <span class="badge badge-high">Risk Level: High</span>
                             </div>
                             <div class="score-attribution">
                                 <strong>Vulnerability Drivers:</strong>
                                 <ul id="riskDriversList">
-                                    <li>High surface temperature (38.5°C)</li>
-                                    <li>Critical vegetation canopy deficit (0.18 NDVI)</li>
-                                    <li>Dense impervious concrete construction</li>
-                                    <li>High demographic exposure density</li>
+                                    <li>High surface temperature (36.4°C)</li>
+                                    <li>Low deltaic elevation profile prone to waterlogging</li>
+                                    <li>Vegetation deficit in dense industrial ward</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </section>
 
+                <!-- Multi-Temporal Decadal Trend Chart -->
                 <section class="chart-section">
                     <div class="section-title">
-                        <i class="fa-solid fa-chart-line"></i> Decadal Trend (2015 – 2025)
+                        <i class="fa-solid fa-chart-line"></i> Decadal Trajectory (2015 – 2026)
                     </div>
                     <div class="chart-container">
                         <canvas id="trendChart"></canvas>
                     </div>
                 </section>
 
+                <!-- Google Earth Pro Integration Card -->
+                <section class="google-earth-card">
+                    <div class="ge-header">
+                        <i class="fa-solid fa-earth-americas text-cyan"></i>
+                        <strong>Google Earth Pro 3D Companion</strong>
+                    </div>
+                    <p class="ge-desc">
+                        You can load SURF's thermal grids, NDVI canopies, and administrative ward polygons directly into <strong>Google Earth Pro</strong> to inspect 3D terrain, historical satellite imagery (2000–present), and rooftop photogrammetry.
+                    </p>
+                    <a id="btnExportKMLSidebar" href="/api/export/kml?lat=22.8456&lng=89.5403&city_id=khulna" class="btn btn-ge-download">
+                        <i class="fa-solid fa-download"></i> Download 3D KML for Google Earth Pro
+                    </a>
+                </section>
+
+                <!-- AI Recommendations -->
                 <section class="recommendations-section">
                     <div class="section-title">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> Actionable Climate Interventions
@@ -209,6 +346,7 @@
                     </div>
                 </section>
 
+                <!-- Scientific Limitation Disclaimer -->
                 <footer class="scientific-disclaimer">
                     <div class="disclaimer-header">
                         <i class="fa-solid fa-circle-info"></i> Scientific Notice & Model Boundaries
@@ -224,8 +362,11 @@
         </main>
     </div>
 
+    <!-- Leaflet JS & Leaflet.heat for Smooth Gradient -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="/static/dashboard.js"></script>
+    <script src="/static/dashboard.js?v=2.5"></script>
 </body>
 </html>

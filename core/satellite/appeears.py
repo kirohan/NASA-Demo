@@ -1,15 +1,10 @@
 """
-SURF — Satellite Urban Resilience Framework
-NASA AppEEARS API Client
+SURF NASA AppEEARS API Client
 """
-
 from __future__ import annotations
-
 import logging
-import time
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 import requests
-
 from config import APPEEARS_API_URL, EARTHDATA_USERNAME, EARTHDATA_PASSWORD, EARTHDATA_TOKEN
 
 logger = logging.getLogger(__name__)
@@ -24,11 +19,7 @@ class AppEEARSClient:
         self._authenticated = False
 
     def authenticate(self) -> bool:
-        if self.token:
-            self.session.headers.update({"Authorization": f"Bearer {self.token}"})
-            self._authenticated = True
-            return True
-        return False
+        return bool(self.token)
 
     def list_products(self) -> List[Dict[str, Any]]:
         return [

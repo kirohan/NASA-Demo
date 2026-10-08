@@ -15,7 +15,7 @@ class UrbanChangeDetector:
         safe_denom = np.where(denom == 0, 1e-6, denom)
         return np.clip((swir - nir) / safe_denom, -1.0, 1.0)
 
-    def detect_changes(self, t1_ndvi: np.ndarray, t2_ndvi: np.ndarray, t1_ndbi: np.ndarray, t2_ndbi: np.ndarray, year_t1: int = 2015, year_t2: int = 2025) -> Dict[str, Any]:
+    def detect_changes(self, t1_ndvi: np.ndarray, t2_ndvi: np.ndarray, t1_ndbi: np.ndarray, t2_ndbi: np.ndarray, year_t1: int = 2015, year_t2: int = 2026) -> Dict[str, Any]:
         total_pixels = t1_ndvi.size
         built_t1_pct = (np.sum(t1_ndbi > 0.05) / total_pixels) * 100.0
         built_t2_pct = (np.sum(t2_ndbi > 0.05) / total_pixels) * 100.0
@@ -34,10 +34,10 @@ class UrbanChangeDetector:
                 "vegetation_t1_area_pct": round(float(veg_t1_pct), 1),
                 "vegetation_t2_area_pct": round(float(veg_t2_pct), 1)
             },
-            "summary_statement": f"Between {year_t1} and {year_t2}, satellite observations indicate a {rel_built:+.1f}% change in built-up area and a {rel_veg:+.1f}% change in vegetation canopy."
+            "summary_statement": f"Between {year_t1} and {year_t2}, satellite observations indicate a {rel_built:+.1f}% expansion in built-up area and a {rel_veg:+.1f}% change in vegetation canopy."
         }
 
-    def generate_change_geojson(self, center_lat: float, center_lng: float, t1_ndvi: np.ndarray, t2_ndvi: np.ndarray, t1_ndbi: np.ndarray, t2_ndbi: np.ndarray, grid_size_km: float = 8.0, subdivisions: int = 16) -> Dict[str, Any]:
+    def generate_change_geojson(self, center_lat: float, center_lng: float, t1_ndvi: np.ndarray, t2_ndvi: np.ndarray, t1_ndbi: np.ndarray, t2_ndbi: np.ndarray, river_mask: np.ndarray = None, grid_size_km: float = 8.0, subdivisions: int = 16) -> Dict[str, Any]:
         rows, cols = t1_ndvi.shape
         d_lat = (grid_size_km / 111.0) / subdivisions
         d_lng = (grid_size_km / (111.0 * np.cos(np.radians(center_lat)))) / subdivisions
@@ -51,8 +51,13 @@ class UrbanChangeDetector:
 
         for i in range(subdivisions):
             for j in range(subdivisions):
-                d_veg = float(delta_ndvi[min(rows - 1, i * step_r), min(cols - 1, j * step_c)])
-                d_urb = float(delta_ndbi[min(rows - 1, i * step_r), min(cols - 1, j * step_c)])
+                r_idx = min(rows - 1, i * step_r)
+                c_idx = min(cols - 1, j * step_c)
+                if river_mask is not None and river_mask[r_idx, c_idx]:
+                    continue
+
+                d_veg = float(delta_ndvi[r_idx, c_idx])
+                d_urb = float(delta_ndbi[r_idx, c_idx])
                 if d_urb > 0.10 and d_veg < -0.05:
                     cat, color = "Urban Expansion", "#ec4899"
                 elif d_veg < -0.12:
@@ -61,6 +66,7 @@ class UrbanChangeDetector:
                     cat, color = "Greening Gain", "#22c55e"
                 else:
                     cat, color = "Stable Urban/Matrix", "#64748b"
+
                 min_lat = start_lat + i * d_lat
                 max_lat = min_lat + d_lat
                 min_lng = start_lng + j * d_lng
@@ -74,7 +80,7 @@ class UrbanChangeDetector:
                     "properties": {
                         "change_category": cat,
                         "fill_color": color,
-                        "fill_opacity": 0.65 if cat != "Stable Urban/Matrix" else 0.20
+                        "fill_opacity": 0.45 if cat != "Stable Urban/Matrix" else 0.15
                     }
                 })
         return {"type": "FeatureCollection", "features": features}

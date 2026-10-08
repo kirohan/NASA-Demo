@@ -1,232 +1,185 @@
 {
   "type": "FeatureCollection",
+  "name": "Dhaka_Detailed_Wards",
   "features": [
     {
       "type": "Feature",
       "id": "dhaka_ward_35",
+      "properties": {
+        "ward_name": "Ward 35 (Mirpur-10 & Senpara)",
+        "admin_code": "DNCC-W35",
+        "area_sqkm": 4.85,
+        "area_hectares": 485,
+        "population": 162000,
+        "population_density": 33402,
+        "elevation_m": 8.5,
+        "mean_lst_c": 38.6,
+        "mean_ndvi": 0.14,
+        "mean_ndbi": 0.28,
+        "climate_risk_score": 84,
+        "risk_tier": "Extreme"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              90.383,
-              23.807
+              90.355,
+              23.798
             ],
             [
-              90.37861,
-              23.81761
+              90.38,
+              23.798
             ],
             [
-              90.368,
-              23.822
+              90.382,
+              23.818
             ],
             [
-              90.35739,
-              23.81761
+              90.358,
+              23.818
             ],
             [
-              90.353,
-              23.807
-            ],
-            [
-              90.35739,
-              23.79639
-            ],
-            [
-              90.368,
-              23.792
-            ],
-            [
-              90.37861,
-              23.79639
-            ],
-            [
-              90.383,
-              23.807
+              90.355,
+              23.798
             ]
           ]
         ]
-      },
-      "properties": {
-        "ward_name": "Ward 35 (Mirpur Section 10)",
-        "population_density": 32400,
-        "mean_lst_c": 38.6,
-        "mean_ndvi": 0.14,
-        "mean_ndbi": 0.28,
-        "elevation_m": 8.5,
-        "climate_risk_score": 84,
-        "risk_tier": "Extreme"
       }
     },
     {
       "type": "Feature",
       "id": "dhaka_ward_19",
+      "properties": {
+        "ward_name": "Ward 19 (Gulshan-1 & Banani)",
+        "admin_code": "DNCC-W19",
+        "area_sqkm": 6.2,
+        "area_hectares": 620,
+        "population": 118000,
+        "population_density": 19032,
+        "elevation_m": 11.2,
+        "mean_lst_c": 33.8,
+        "mean_ndvi": 0.32,
+        "mean_ndbi": 0.08,
+        "climate_risk_score": 54,
+        "risk_tier": "Moderate"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              90.433,
-              23.792
+              90.402,
+              23.78
             ],
             [
-              90.42773,
-              23.80473
+              90.428,
+              23.78
             ],
             [
-              90.415,
-              23.81
+              90.425,
+              23.805
             ],
             [
-              90.40227,
-              23.80473
+              90.4,
+              23.805
             ],
             [
-              90.397,
-              23.792
-            ],
-            [
-              90.40227,
-              23.77927
-            ],
-            [
-              90.415,
-              23.774
-            ],
-            [
-              90.42773,
-              23.77927
-            ],
-            [
-              90.433,
-              23.792
+              90.402,
+              23.78
             ]
           ]
         ]
-      },
-      "properties": {
-        "ward_name": "Ward 19 (Gulshan / Banani)",
-        "population_density": 18500,
-        "mean_lst_c": 33.8,
-        "mean_ndvi": 0.32,
-        "mean_ndbi": 0.08,
-        "elevation_m": 11.2,
-        "climate_risk_score": 54,
-        "risk_tier": "Moderate"
       }
     },
     {
       "type": "Feature",
       "id": "dhaka_ward_47",
+      "properties": {
+        "ward_name": "Ward 47 (Old Dhaka / Kotwali & Sadarghat)",
+        "admin_code": "DSCC-W47",
+        "area_sqkm": 3.9,
+        "area_hectares": 390,
+        "population": 195000,
+        "population_density": 50000,
+        "elevation_m": 6.8,
+        "mean_lst_c": 39.8,
+        "mean_ndvi": 0.08,
+        "mean_ndbi": 0.36,
+        "climate_risk_score": 91,
+        "risk_tier": "Extreme"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              90.421,
-              23.712
+              90.395,
+              23.702
             ],
             [
-              90.4169,
-              23.7219
+              90.42,
+              23.702
             ],
             [
-              90.407,
-              23.726
+              90.422,
+              23.722
             ],
             [
-              90.3971,
-              23.7219
+              90.392,
+              23.722
             ],
             [
-              90.393,
-              23.712
-            ],
-            [
-              90.3971,
-              23.7021
-            ],
-            [
-              90.407,
-              23.698
-            ],
-            [
-              90.4169,
-              23.7021
-            ],
-            [
-              90.421,
-              23.712
+              90.395,
+              23.702
             ]
           ]
         ]
-      },
-      "properties": {
-        "ward_name": "Ward 47 (Old Dhaka / Kotwali)",
-        "population_density": 48000,
-        "mean_lst_c": 39.8,
-        "mean_ndvi": 0.08,
-        "mean_ndbi": 0.36,
-        "elevation_m": 6.8,
-        "climate_risk_score": 91,
-        "risk_tier": "Extreme"
       }
     },
     {
       "type": "Feature",
       "id": "dhaka_ward_15",
+      "properties": {
+        "ward_name": "Ward 15 (Dhanmondi Lake & Residential)",
+        "admin_code": "DSCC-W15",
+        "area_sqkm": 4.1,
+        "area_hectares": 410,
+        "population": 105000,
+        "population_density": 25609,
+        "elevation_m": 9.8,
+        "mean_lst_c": 34.2,
+        "mean_ndvi": 0.29,
+        "mean_ndbi": 0.12,
+        "climate_risk_score": 58,
+        "risk_tier": "Moderate"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              90.391,
-              23.746
+              90.365,
+              23.738
             ],
             [
-              90.38631,
-              23.75731
+              90.388,
+              23.738
             ],
             [
-              90.375,
-              23.762
+              90.385,
+              23.755
             ],
             [
-              90.36369,
-              23.75731
+              90.362,
+              23.755
             ],
             [
-              90.359,
-              23.746
-            ],
-            [
-              90.36369,
-              23.73469
-            ],
-            [
-              90.375,
-              23.73
-            ],
-            [
-              90.38631,
-              23.73469
-            ],
-            [
-              90.391,
-              23.746
+              90.365,
+              23.738
             ]
           ]
         ]
-      },
-      "properties": {
-        "ward_name": "Ward 15 (Dhanmondi Lake)",
-        "population_density": 24500,
-        "mean_lst_c": 34.2,
-        "mean_ndvi": 0.29,
-        "mean_ndbi": 0.12,
-        "elevation_m": 9.8,
-        "climate_risk_score": 58,
-        "risk_tier": "Moderate"
       }
     }
   ]

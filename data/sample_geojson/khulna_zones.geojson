@@ -1,175 +1,343 @@
 {
   "type": "FeatureCollection",
+  "name": "Khulna_Detailed_Zones",
   "features": [
     {
       "type": "Feature",
-      "id": "khulna_khalishpur",
+      "id": "khulna_sadar",
+      "properties": {
+        "zone_name": "Khulna Sadar (Kotwali & Riverfront Core)",
+        "admin_code": "KCC-SADAR",
+        "area_sqkm": 6.45,
+        "area_hectares": 645,
+        "population": 195000,
+        "population_density": 30232,
+        "elevation_m": 3.5,
+        "landmarks": "Bhairab Riverfront, Picture Palace Mor, Dakbangla, KDA New Market",
+        "mean_lst_c": 37.8,
+        "mean_ndvi": 0.14,
+        "mean_ndbi": 0.32,
+        "climate_risk_score": 85,
+        "risk_tier": "Extreme"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.553,
-              22.862
+              89.552,
+              22.805
             ],
             [
-              89.54773,
-              22.87473
+              89.575,
+              22.805
             ],
             [
-              89.535,
-              22.88
+              89.58,
+              22.818
             ],
             [
-              89.52227,
-              22.87473
+              89.568,
+              22.83
             ],
             [
-              89.517,
-              22.862
+              89.548,
+              22.825
             ],
             [
-              89.52227,
-              22.84927
+              89.545,
+              22.812
             ],
             [
-              89.535,
-              22.844
-            ],
-            [
-              89.54773,
-              22.84927
-            ],
-            [
-              89.553,
-              22.862
+              89.552,
+              22.805
             ]
           ]
         ]
-      },
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_khalishpur",
       "properties": {
-        "zone_name": "Khalishpur Industrial Zone",
-        "population_density": 26000,
-        "mean_lst_c": 36.8,
-        "mean_ndvi": 0.19,
-        "mean_ndbi": 0.24,
+        "zone_name": "Khalishpur Industrial & Residential Sector",
+        "admin_code": "KCC-KHALISHPUR",
+        "area_sqkm": 11.85,
+        "area_hectares": 1185,
+        "population": 240000,
+        "population_density": 20253,
         "elevation_m": 3.8,
-        "climate_risk_score": 79,
-        "risk_tier": "High"
+        "landmarks": "Newsprint Mills, Platinum Jubilee Jute Mills, Peoples Golchattar",
+        "mean_lst_c": 37.2,
+        "mean_ndvi": 0.18,
+        "mean_ndbi": 0.28,
+        "climate_risk_score": 81,
+        "risk_tier": "Extreme"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.52,
+              22.845
+            ],
+            [
+              89.548,
+              22.845
+            ],
+            [
+              89.552,
+              22.875
+            ],
+            [
+              89.53,
+              22.88
+            ],
+            [
+              89.512,
+              22.865
+            ],
+            [
+              89.52,
+              22.845
+            ]
+          ]
+        ]
       }
     },
     {
       "type": "Feature",
       "id": "khulna_sonadanga",
+      "properties": {
+        "zone_name": "Sonadanga Transport & Residential Hub",
+        "admin_code": "KCC-SONADANGA",
+        "area_sqkm": 8.15,
+        "area_hectares": 815,
+        "population": 185000,
+        "population_density": 22699,
+        "elevation_m": 4.2,
+        "landmarks": "Sonadanga Central Bus Terminal, Solar Park, Boyra Main Road Junction",
+        "mean_lst_c": 35.1,
+        "mean_ndvi": 0.26,
+        "mean_ndbi": 0.16,
+        "climate_risk_score": 67,
+        "risk_tier": "High"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.558,
-              22.825
+              89.53,
+              22.815
             ],
             [
-              89.55331,
-              22.83631
+              89.55,
+              22.815
             ],
             [
-              89.542,
-              22.841
-            ],
-            [
-              89.53069,
-              22.83631
+              89.548,
+              22.838
             ],
             [
               89.526,
+              22.838
+            ],
+            [
+              89.522,
               22.825
             ],
             [
-              89.53069,
-              22.81369
-            ],
-            [
-              89.542,
-              22.809
-            ],
-            [
-              89.55331,
-              22.81369
-            ],
-            [
-              89.558,
-              22.825
+              89.53,
+              22.815
             ]
           ]
         ]
-      },
-      "properties": {
-        "zone_name": "Sonadanga Residential Area",
-        "population_density": 22500,
-        "mean_lst_c": 34.6,
-        "mean_ndvi": 0.28,
-        "mean_ndbi": 0.14,
-        "elevation_m": 4.2,
-        "climate_risk_score": 65,
-        "risk_tier": "High"
       }
     },
     {
       "type": "Feature",
-      "id": "khulna_kotwali",
+      "id": "khulna_boyra",
+      "properties": {
+        "zone_name": "Boyra & Mujgunni Civic-Medical Sector",
+        "admin_code": "KCC-BOYRA",
+        "area_sqkm": 5.3,
+        "area_hectares": 530,
+        "population": 115000,
+        "population_density": 21698,
+        "elevation_m": 4.5,
+        "landmarks": "Khulna Medical College Hospital, Mujgunni Residential, Police Lines",
+        "mean_lst_c": 34.4,
+        "mean_ndvi": 0.29,
+        "mean_ndbi": 0.12,
+        "climate_risk_score": 59,
+        "risk_tier": "Moderate"
+      },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.578,
-              22.812
-            ],
-            [
-              89.57361,
-              22.82261
-            ],
-            [
-              89.563,
-              22.827
-            ],
-            [
-              89.55239,
-              22.82261
+              89.528,
+              22.835
             ],
             [
               89.548,
-              22.812
+              22.835
             ],
             [
-              89.55239,
-              22.80139
+              89.548,
+              22.855
             ],
             [
-              89.563,
-              22.797
+              89.525,
+              22.855
             ],
             [
-              89.57361,
-              22.80139
-            ],
-            [
-              89.578,
-              22.812
+              89.528,
+              22.835
             ]
           ]
         ]
-      },
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_gollamari",
       "properties": {
-        "zone_name": "Kotwali Commercial Core",
-        "population_density": 31000,
-        "mean_lst_c": 37.4,
-        "mean_ndvi": 0.15,
-        "mean_ndbi": 0.29,
-        "elevation_m": 3.5,
-        "climate_risk_score": 83,
-        "risk_tier": "Extreme"
+        "zone_name": "Gollamari & Khulna University Sector",
+        "admin_code": "KCC-GOLLAMARI",
+        "area_sqkm": 6.9,
+        "area_hectares": 690,
+        "population": 75000,
+        "population_density": 10869,
+        "elevation_m": 3.2,
+        "landmarks": "Khulna University Campus, Mayur River Bridge, Gollamari Memorial",
+        "mean_lst_c": 32.5,
+        "mean_ndvi": 0.41,
+        "mean_ndbi": -0.04,
+        "climate_risk_score": 48,
+        "risk_tier": "Moderate"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.515,
+              22.79
+            ],
+            [
+              89.545,
+              22.795
+            ],
+            [
+              89.54,
+              22.815
+            ],
+            [
+              89.51,
+              22.812
+            ],
+            [
+              89.515,
+              22.79
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_rupsha",
+      "properties": {
+        "zone_name": "Rupsha Riverfront & Wetland Buffer",
+        "admin_code": "KCC-RUPSHA",
+        "area_sqkm": 9.2,
+        "area_hectares": 920,
+        "population": 92000,
+        "population_density": 10000,
+        "elevation_m": 2.8,
+        "landmarks": "Khan Jahan Ali (Rupsha) Bridge, Fish Processing Zone, Rupsha Ghat",
+        "mean_lst_c": 31.8,
+        "mean_ndvi": 0.44,
+        "mean_ndbi": -0.08,
+        "climate_risk_score": 51,
+        "risk_tier": "Moderate"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.56,
+              22.775
+            ],
+            [
+              89.595,
+              22.78
+            ],
+            [
+              89.59,
+              22.808
+            ],
+            [
+              89.565,
+              22.805
+            ],
+            [
+              89.56,
+              22.775
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_daulatpur",
+      "properties": {
+        "zone_name": "Daulatpur Riverport & Northern Hub",
+        "admin_code": "KCC-DAULATPUR",
+        "area_sqkm": 7.6,
+        "area_hectares": 760,
+        "population": 130000,
+        "population_density": 17105,
+        "elevation_m": 4.1,
+        "landmarks": "Daulatpur College, River Jetty, BL College Campus",
+        "mean_lst_c": 36.1,
+        "mean_ndvi": 0.22,
+        "mean_ndbi": 0.21,
+        "climate_risk_score": 73,
+        "risk_tier": "High"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.515,
+              22.875
+            ],
+            [
+              89.54,
+              22.875
+            ],
+            [
+              89.545,
+              22.905
+            ],
+            [
+              89.51,
+              22.905
+            ],
+            [
+              89.515,
+              22.875
+            ]
+          ]
+        ]
       }
     }
   ]
