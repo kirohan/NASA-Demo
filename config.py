@@ -1,0 +1,2 @@
+PROJECT_NAME = "SURF"
+DEFAULT_LOCATION = "Dhaka, Bangladesh"

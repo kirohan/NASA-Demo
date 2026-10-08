@@ -1,7 +1,8 @@
 fastapi
 uvicorn
-pandas
 numpy
+pandas
 geopandas
 rasterio
 scikit-learn
+folium
