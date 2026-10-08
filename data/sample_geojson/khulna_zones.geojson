@@ -1,0 +1,176 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "khulna_khalishpur",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.553,
+              22.862
+            ],
+            [
+              89.54773,
+              22.87473
+            ],
+            [
+              89.535,
+              22.88
+            ],
+            [
+              89.52227,
+              22.87473
+            ],
+            [
+              89.517,
+              22.862
+            ],
+            [
+              89.52227,
+              22.84927
+            ],
+            [
+              89.535,
+              22.844
+            ],
+            [
+              89.54773,
+              22.84927
+            ],
+            [
+              89.553,
+              22.862
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Khalishpur Industrial Zone",
+        "population_density": 26000,
+        "mean_lst_c": 36.8,
+        "mean_ndvi": 0.19,
+        "mean_ndbi": 0.24,
+        "elevation_m": 3.8,
+        "climate_risk_score": 79,
+        "risk_tier": "High"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_sonadanga",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.558,
+              22.825
+            ],
+            [
+              89.55331,
+              22.83631
+            ],
+            [
+              89.542,
+              22.841
+            ],
+            [
+              89.53069,
+              22.83631
+            ],
+            [
+              89.526,
+              22.825
+            ],
+            [
+              89.53069,
+              22.81369
+            ],
+            [
+              89.542,
+              22.809
+            ],
+            [
+              89.55331,
+              22.81369
+            ],
+            [
+              89.558,
+              22.825
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Sonadanga Residential Area",
+        "population_density": 22500,
+        "mean_lst_c": 34.6,
+        "mean_ndvi": 0.28,
+        "mean_ndbi": 0.14,
+        "elevation_m": 4.2,
+        "climate_risk_score": 65,
+        "risk_tier": "High"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khulna_kotwali",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              89.578,
+              22.812
+            ],
+            [
+              89.57361,
+              22.82261
+            ],
+            [
+              89.563,
+              22.827
+            ],
+            [
+              89.55239,
+              22.82261
+            ],
+            [
+              89.548,
+              22.812
+            ],
+            [
+              89.55239,
+              22.80139
+            ],
+            [
+              89.563,
+              22.797
+            ],
+            [
+              89.57361,
+              22.80139
+            ],
+            [
+              89.578,
+              22.812
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "zone_name": "Kotwali Commercial Core",
+        "population_density": 31000,
+        "mean_lst_c": 37.4,
+        "mean_ndvi": 0.15,
+        "mean_ndbi": 0.29,
+        "elevation_m": 3.5,
+        "climate_risk_score": 83,
+        "risk_tier": "Extreme"
+      }
+    }
+  ]
+}

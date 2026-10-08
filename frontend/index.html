@@ -1,27 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>SURF Dashboard</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SURF — Satellite Urban Resilience Framework | NASA Space Apps Challenge</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body>
+    <div class="app-container">
+        <header class="navbar">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-satellite"></i></div>
+                <div class="brand-text">
+                    <div class="brand-title">SURF</div>
+                    <div class="brand-subtitle">Satellite Urban Resilience Framework</div>
+                </div>
+                <span class="nasa-badge"><i class="fa-solid fa-rocket"></i> NASA Space Apps</span>
+            </div>
 
-<h1>🌍 SURF</h1>
-<h2>Satellite Urban Resilience Framework</h2>
+            <div class="nav-controls">
+                <div class="control-group">
+                    <label for="citySelect"><i class="fa-solid fa-city"></i> Focus City:</label>
+                    <select id="citySelect" class="styled-select">
+                        <option value="dhaka" selected>Dhaka, Bangladesh</option>
+                        <option value="khulna">Khulna, Bangladesh</option>
+                        <option value="phoenix">Phoenix, USA</option>
+                        <option value="nairobi">Nairobi, Kenya</option>
+                        <option value="cairo">Cairo, Egypt</option>
+                    </select>
+                </div>
 
-<div class="panel">
-<h3>Climate Analysis</h3>
-<p>Heat Risk: 🔴 High</p>
-<p>Vegetation: Low</p>
+                <div class="coordinate-display" id="coordDisplay">
+                    <i class="fa-solid fa-crosshairs"></i> Lat: <span id="dispLat">23.810</span>, Lng: <span id="dispLng">90.413</span>
+                </div>
 
-<h3>Recommendation</h3>
-<ul>
-<li>Plant trees</li>
-<li>Improve green infrastructure</li>
-<li>Use cool roof technology</li>
-</ul>
-</div>
+                <button id="btnAnalyze" class="btn btn-primary">
+                    <i class="fa-solid fa-chart-pie"></i> Analyze Location
+                </button>
+            </div>
+        </header>
 
+        <main class="dashboard-body">
+            <div class="map-wrapper">
+                <div id="map"></div>
+
+                <div class="layer-control-card glass-panel">
+                    <div class="card-header">
+                        <h4><i class="fa-solid fa-layer-group"></i> Satellite Layers</h4>
+                        <span class="pulse-indicator">LIVE EO</span>
+                    </div>
+                    <div class="layer-list">
+                        <label class="layer-checkbox">
+                            <input type="checkbox" id="chkHeat" checked>
+                            <span class="checkmark heat-check"></span>
+                            <span class="layer-label">
+                                <strong>Urban Heat Map</strong>
+                                <small>Landsat 8/9 TIRS & MOD11A2</small>
+                            </span>
+                        </label>
+
+                        <label class="layer-checkbox">
+                            <input type="checkbox" id="chkVegetation">
+                            <span class="checkmark veg-check"></span>
+                            <span class="layer-label">
+                                <strong>Vegetation Health (NDVI)</strong>
+                                <small>Sentinel-2 & MOD13Q1</small>
+                            </span>
+                        </label>
+
+                        <label class="layer-checkbox">
+                            <input type="checkbox" id="chkChange">
+                            <span class="checkmark change-check"></span>
+                            <span class="layer-label">
+                                <strong>Urban Change (2015-2025)</strong>
+                                <small>Delta NDBI & Canopy Loss</small>
+                            </span>
+                        </label>
+
+                        <label class="layer-checkbox">
+                            <input type="checkbox" id="chkWards" checked>
+                            <span class="checkmark ward-check"></span>
+                            <span class="layer-label">
+                                <strong>Administrative Zones</strong>
+                                <small>Ward / District Boundaries</small>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="legend-container" id="mapLegend">
+                        <div class="legend-title" id="legendTitle">Urban Heat Island (LST °C)</div>
+                        <div class="legend-scale" id="legendScale">
+                            <div class="legend-bar heat-gradient"></div>
+                            <div class="legend-labels">
+                                <span>&lt;28°C (Low)</span>
+                                <span>34°C (Mod)</span>
+                                <span>38°C (High)</span>
+                                <span>&gt;40°C (Ext)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-hint-banner">
+                    <i class="fa-solid fa-mouse-pointer"></i> Click any point or administrative polygon on the map to trigger deep satellite analysis.
+                </div>
+            </div>
+
+            <aside class="sidebar-panel glass-panel">
+                <div class="sidebar-header">
+                    <div class="area-badge">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="activeAreaTitle">Dhaka Metropolitan Area</span>
+                    </div>
+                    <div class="eo-status">
+                        <i class="fa-solid fa-circle-check text-success"></i> Calibrated
+                    </div>
+                </div>
+
+                <section class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon thermal-icon">
+                            <i class="fa-solid fa-temperature-arrow-up"></i>
+                        </div>
+                        <div class="metric-data">
+                            <div class="metric-label">Land Surface Temp</div>
+                            <div class="metric-value" id="valTemperature">38.5 <small>°C</small></div>
+                            <div class="metric-sub" id="valHeatRisk">
+                                <span class="badge badge-high">High Heat Stress</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon veg-icon">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div class="metric-data">
+                            <div class="metric-label">Vegetation Health (NDVI)</div>
+                            <div class="metric-value" id="valNdvi">0.18 <small>NDVI</small></div>
+                            <div class="metric-sub" id="valGreenCoverage">
+                                <span class="badge badge-warning">Canopy Deficit: 82%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon urban-icon">
+                            <i class="fa-solid fa-city"></i>
+                        </div>
+                        <div class="metric-data">
+                            <div class="metric-label">Urban Expansion (10-Yr)</div>
+                            <div class="metric-value" id="valUrbanChange">+35.2 <small>%</small></div>
+                            <div class="metric-sub" id="valCanopyLoss">
+                                <span class="badge badge-danger">Canopy: -18.4%</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="resilience-score-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-shield-halved"></i> Climate Risk & Resilience Score
+                    </div>
+                    <div class="score-card">
+                        <div class="score-radial-wrapper">
+                            <div class="score-circle" id="scoreCircle">
+                                <div class="score-number" id="riskScoreVal">82</div>
+                                <div class="score-denom">/ 100</div>
+                            </div>
+                        </div>
+                        <div class="score-details">
+                            <div class="score-tier" id="riskTierBadge">
+                                <span class="badge badge-extreme">Risk Level: Extreme</span>
+                            </div>
+                            <div class="score-attribution">
+                                <strong>Vulnerability Drivers:</strong>
+                                <ul id="riskDriversList">
+                                    <li>High surface temperature (38.5°C)</li>
+                                    <li>Critical vegetation canopy deficit (0.18 NDVI)</li>
+                                    <li>Dense impervious concrete construction</li>
+                                    <li>High demographic exposure density</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="chart-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-chart-line"></i> Decadal Trend (2015 – 2025)
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </section>
+
+                <section class="recommendations-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Actionable Climate Interventions
+                    </div>
+                    <div class="rec-list" id="recList">
+                    </div>
+                </section>
+
+                <footer class="scientific-disclaimer">
+                    <div class="disclaimer-header">
+                        <i class="fa-solid fa-circle-info"></i> Scientific Notice & Model Boundaries
+                    </div>
+                    <p>
+                        SURF outputs represent <strong>satellite-derived environmental indicators</strong> and 
+                        <strong>estimated environmental impacts</strong> synthesized from NASA Landsat, MODIS, 
+                        and SRTM/NASADEM. Metrics provide evidence-based decision support and must not be 
+                        interpreted as deterministic microclimate forecasts.
+                    </p>
+                </footer>
+            </aside>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="/static/dashboard.js"></script>
 </body>
 </html>

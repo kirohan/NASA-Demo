@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
+venv/
 .env
-data/raw/
+*.png
+.DS_Store
