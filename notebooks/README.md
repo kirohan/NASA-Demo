@@ -1,0 +1,5 @@
+Future notebooks:
+
+01_download_satellite_data.ipynb
+02_heatmap_analysis.ipynb
+03_ndvi_analysis.ipynb
