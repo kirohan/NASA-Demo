@@ -84,6 +84,26 @@ function updateSectorRecommendations(sectorId, riskTier) {
         btnText: "Enable Tidal Protection", action: "wetland"
       }
     ],
+        "KCC-KUET": [
+      {
+        p: 1, title: "Campus Botanical Canopy Preservation", icon: "fa-tree", cls: "p1",
+        impact: "+0.12 NDVI Canopy", chipCls: "canopy", impactIcon: "fa-leaf",
+        why: "KUET's extensive campus tree groves and botanical verges (NDVI 0.38) provide natural microclimate cooling. Preserving mature trees insulates academic facilities against extreme pre-monsoon heat waves.",
+        btnText: "Simulate 3,500 Trees", action: "canopy"
+      },
+      {
+        p: 2, title: "Engineering Lab Cool Roof Retrofit", icon: "fa-brush", cls: "p2",
+        impact: "-1.4°C Cooling", chipCls: "cooling", impactIcon: "fa-temperature-arrow-down",
+        why: "Coating engineering workshop and laboratory roofs with reflective elastomeric paint (α > 0.75) reduces heat buildup and cuts indoor cooling energy demands.",
+        btnText: "Simulate 30% Cool Roofs", action: "cool_roofs"
+      },
+      {
+        p: 3, title: "Campus Lake & Bioswale Protection", icon: "fa-water", cls: "p3",
+        impact: "-1.1°C Breeze Buffer", chipCls: "wetland", impactIcon: "fa-shield",
+        why: "Preserving KUET campus retention ponds and stormwater bioswales secures natural evaporative cooling and prevents monsoon waterlogging.",
+        btnText: "Enable Tidal Protection", action: "wetland"
+      }
+    ],
     "KCC-RUPSHA": [
       {
         p: 1, title: "Tidal Riverfront Buffer Conservation", icon: "fa-shield-halved", cls: "p1",
@@ -335,6 +355,47 @@ const KHULNA_SECTORS_DATA = {
       recommendation: "Portside Microclimate Interventions: Introduce permeable pavements and green cargo staging canopies."
     },
     recommendation: "Portside Microclimate Interventions: Introduce permeable pavements and green cargo staging canopies."
+  },
+    "KCC-KUET": {
+    city_id: "khulna",
+    year: 2026,
+    sector_id: "KCC-KUET",
+    sector_name: "KUET & Fulbarigate Academic-Tech Corridor",
+    landmarks: "KUET Main Campus, Fulbarigate Junction, KUET Central Library, Teligati Bypass",
+    elevation_m: 4.8,
+    total_area_hectares: 580,
+    total_area_sqkm: 5.80,
+    population: 68000,
+    population_density: 11724,
+    land_cover: {
+      built_up_hectares: 262.2,
+      built_up_pct: 45.2,
+      canopy_hectares: 223.9,
+      canopy_pct: 38.6,
+      water_hectares: 93.9,
+      water_pct: 16.2
+    },
+    indicators: {
+      mean_lst_c: 33.2,
+      mean_ndvi: 0.38,
+      urban_expansion_pct: 74.5,
+      who_green_deficit_pct: 0.0,
+      sqm_green_per_capita: 11.2
+    },
+    climate_risk: {
+      composite_risk_score: 32,
+      resilience_score: 68,
+      risk_tier: "Low / Resilient",
+      tier_color: "#10b981",
+      components: {
+        heat_exposure: { raw_value: "33.2°C", normalized_pct: 32, weight: 0.35, contributed_pts: 11.2 },
+        vegetation_deficit: { raw_value: "NDVI 0.38", normalized_pct: 25, weight: 0.25, contributed_pts: 6.3 },
+        urban_density: { raw_value: "45.2% Built-up", normalized_pct: 45, weight: 0.20, contributed_pts: 9.0 },
+        population_exposure: { raw_value: "11,724 /km²", normalized_pct: 28, weight: 0.20, contributed_pts: 5.5 }
+      },
+      recommendation: "Academic Microclimate Sanctuary: Preserve KUET campus botanical tree canopy, expand solar-reflective cool roofs across engineering laboratories, and maintain campus water retention ponds."
+    },
+    recommendation: "Academic Microclimate Sanctuary: Preserve KUET campus botanical tree canopy, expand solar-reflective cool roofs across engineering laboratories, and maintain campus water retention ponds."
   },
   "KCC-RUPSHA": {
     city_id: "khulna",
@@ -707,6 +768,28 @@ function hideRasterLoader() {
 }
 
 function setupEventListeners() {
+
+  // Judge Quick-Start Banner Listeners
+  const judgeBanner = document.getElementById("judgeWelcomeBadge");
+  const btnLaunchJudge = document.getElementById("btnLaunchJudgeDemo");
+  const btnDismissJudge = document.getElementById("btnDismissJudgeBanner");
+
+  if (btnLaunchJudge) {
+    btnLaunchJudge.addEventListener("click", () => {
+      if (judgeBanner) judgeBanner.classList.add("hidden");
+      const tourCard = document.getElementById("demoTourCard");
+      if (tourCard) tourCard.classList.remove("hidden");
+      const jb = document.getElementById("judgeWelcomeBadge"); if (jb) jb.classList.add("hidden");
+      renderTourStep(1);
+    });
+  }
+
+  if (btnDismissJudge) {
+    btnDismissJudge.addEventListener("click", () => {
+      if (judgeBanner) judgeBanner.classList.add("hidden");
+    });
+  }
+
   // City Selector
   document.getElementById("citySelector").addEventListener("change", (e) => {
     const val = e.target.value;
@@ -1235,6 +1318,7 @@ function initDemoTour() {
   if (btnExplore) {
     btnExplore.addEventListener("click", () => {
       if (tourCard) tourCard.classList.remove("hidden");
+      const jb = document.getElementById("judgeWelcomeBadge"); if (jb) jb.classList.add("hidden");
       renderTourStep(1);
       showToast("Judges Guided Tour started", "success");
     });
@@ -2220,6 +2304,102 @@ function updateAnalysisDashboard(data) {
 
   // Dynamically update recommendations list for this sector
   updateSectorRecommendations(data.sector_id, riskTier);
+
+  // Dynamic Human Impact Story by Sector
+  const humanStories = {
+    "KCC-SADAR": {
+      lead: "The Corrugated Tin-Roof Heat Trap:",
+      text: "In Khulna Sadar (Kotwali Core), over 68% of residences are roofed with uninsulated corrugated tin. Peak indoor temperatures exceed 42°C, causing chronic sleep deprivation, heat exhaustion, and cardiovascular stress for 195,000+ residents including informal workers and rickshaw pullers.",
+      pop: "195,000+", heat: ">42°C", relief: "-2.5°C"
+    },
+    "KCC-KHALISHPUR": {
+      lead: "Industrial Worker Colony Thermal Burden:",
+      text: "Over 240,000 residents and jute/paper mill workers live in dense tin barracks directly adjacent to heavy machinery. With canopy coverage collapsed to 18.5%, overnight thermal re-radiation prevents physical recovery and elevates workplace heat illness.",
+      pop: "240,000+", heat: ">41°C", relief: "-2.1°C"
+    },
+    "KCC-SONADANGA": {
+      lead: "Transit Commuter & Terminal Heat Strain:",
+      text: "Sonadanga Central Bus Terminal handles 50,000+ daily passengers across unshaded asphalt aprons. High sensible heat flux causes severe daytime heat exhaustion for transport crews, roadside vendors, and medical college visitors.",
+      pop: "185,000+", heat: ">40°C", relief: "-1.6°C"
+    },
+    "KCC-DAULATPUR": {
+      lead: "Riverport Laborers & Cargo Terminal Exposure:",
+      text: "Unshaded river cargo docks and wholesale bazaar corridors expose 130,000+ port laborers and merchants to acute solar insolation, where lack of canopy elevates surface temperatures to 36.1°C.",
+      pop: "130,000+", heat: ">39°C", relief: "-1.7°C"
+    },
+      "KCC-KUET": {
+    city_id: "khulna",
+    year: 2026,
+    sector_id: "KCC-KUET",
+    sector_name: "KUET & Fulbarigate Academic-Tech Corridor",
+    landmarks: "KUET Main Campus, Fulbarigate Junction, KUET Central Library, Teligati Bypass",
+    elevation_m: 4.8,
+    total_area_hectares: 580,
+    total_area_sqkm: 5.80,
+    population: 68000,
+    population_density: 11724,
+    land_cover: {
+      built_up_hectares: 262.2,
+      built_up_pct: 45.2,
+      canopy_hectares: 223.9,
+      canopy_pct: 38.6,
+      water_hectares: 93.9,
+      water_pct: 16.2
+    },
+    indicators: {
+      mean_lst_c: 33.2,
+      mean_ndvi: 0.38,
+      urban_expansion_pct: 74.5,
+      who_green_deficit_pct: 0.0,
+      sqm_green_per_capita: 11.2
+    },
+    climate_risk: {
+      composite_risk_score: 32,
+      resilience_score: 68,
+      risk_tier: "Low / Resilient",
+      tier_color: "#10b981",
+      components: {
+        heat_exposure: { raw_value: "33.2°C", normalized_pct: 32, weight: 0.35, contributed_pts: 11.2 },
+        vegetation_deficit: { raw_value: "NDVI 0.38", normalized_pct: 25, weight: 0.25, contributed_pts: 6.3 },
+        urban_density: { raw_value: "45.2% Built-up", normalized_pct: 45, weight: 0.20, contributed_pts: 9.0 },
+        population_exposure: { raw_value: "11,724 /km²", normalized_pct: 28, weight: 0.20, contributed_pts: 5.5 }
+      },
+      recommendation: "Academic Microclimate Sanctuary: Preserve KUET campus botanical tree canopy, expand solar-reflective cool roofs across engineering laboratories, and maintain campus water retention ponds."
+    },
+    recommendation: "Academic Microclimate Sanctuary: Preserve KUET campus botanical tree canopy, expand solar-reflective cool roofs across engineering laboratories, and maintain campus water retention ponds."
+  },
+  "KCC-RUPSHA": {
+      lead: "Coastal Migrant Lifeline along the River:",
+      text: "Rupsha shelters 92,000+ coastal climate migrants displaced from the Sundarbans. Preserving the 50-meter tidal river setback is vital to keep the natural evaporative cooling corridor functioning as a free air conditioner for low-income families.",
+      pop: "92,000+", heat: "31.8°C Buffer", relief: "-1.8°C"
+    },
+    "KCC-BOYRA": {
+      lead: "Civic & Healthcare Microclimate Shielding:",
+      text: "Khulna Medical College Hospital treats thousands of acute heatstroke and dehydration patients annually. Expanding shaded green corridors around hospital grounds directly protects immunocompromised citizens.",
+      pop: "115,000+", heat: ">38°C", relief: "-1.3°C"
+    },
+    "KCC-GOLLAMARI": {
+      lead: "Ecological Buffer for 75,000 Citizens:",
+      text: "Khulna University's academic groves (44% canopy) and the Mayur River buffer keep ambient temperatures 5.3°C cooler than the commercial core, serving as an irreplaceable microclimate sanctuary.",
+      pop: "75,000+", heat: "32.5°C Buffer", relief: "-1.6°C"
+    }
+  };
+
+  const storyInfo = humanStories[data.sector_id] || humanStories["KCC-SADAR"];
+  const storyBodyEl = document.getElementById("dynamicStoryText");
+  if (storyBodyEl) {
+    storyBodyEl.innerHTML = `
+      <p class="story-lead"><strong>${storyInfo.lead}</strong></p>
+      <p>${storyInfo.text}</p>
+    `;
+  }
+  const statItems = document.querySelectorAll(".human-impact-stats .impact-stat-item strong");
+  if (statItems.length >= 3) {
+    statItems[0].innerText = storyInfo.pop;
+    statItems[1].innerText = storyInfo.heat;
+    statItems[2].innerText = storyInfo.relief;
+  }
+
 }
 
 function setElText(id, text) {
