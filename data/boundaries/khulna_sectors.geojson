@@ -1,56 +1,65 @@
 {
   "type": "FeatureCollection",
-  "name": "Khulna_Detailed_Zones",
+  "metadata": {
+    "city": "Khulna, Bangladesh",
+    "authority": "Khulna City Corporation (KCC)",
+    "projection": "EPSG:4326 (WGS 84)",
+    "elevation_datum": "EGM96",
+    "total_area_hectares": 10800,
+    "total_area_sqkm": 108.0
+  },
   "features": [
     {
       "type": "Feature",
-      "id": "khulna_sadar",
       "properties": {
-        "zone_name": "Khulna Sadar (Kotwali & Riverfront Core)",
-        "admin_code": "KCC-SADAR",
-        "area_sqkm": 6.45,
+        "sector_id": "KCC-SADAR",
+        "sector_name": "Khulna Sadar (Kotwali & Riverfront Core)",
         "area_hectares": 645,
+        "area_sqkm": 6.45,
         "population": 195000,
         "population_density": 30232,
         "elevation_m": 3.5,
         "landmarks": "Bhairab Riverfront, Picture Palace Mor, Dakbangla, KDA New Market",
         "mean_lst_c": 37.8,
         "mean_ndvi": 0.14,
-        "mean_ndbi": 0.32,
+        "built_up_pct": 68.4,
+        "canopy_pct": 14.2,
+        "water_pct": 17.4,
         "climate_risk_score": 85,
-        "risk_tier": "Extreme"
+        "risk_tier": "Extreme Risk",
+        "recommendation": "Priority Cool Roof Deployment: Apply high-albedo coatings to corrugated tin and commercial roofs to mitigate extreme heat accumulation."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.552,
-              22.805
+              89.558,
+              22.822
             ],
             [
-              89.575,
-              22.805
+              89.569,
+              22.8235
             ],
             [
-              89.58,
-              22.818
-            ],
-            [
-              89.568,
-              22.83
-            ],
-            [
-              89.548,
-              22.825
-            ],
-            [
-              89.545,
+              89.574,
               22.812
             ],
             [
-              89.552,
-              22.805
+              89.568,
+              22.802
+            ],
+            [
+              89.554,
+              22.804
+            ],
+            [
+              89.551,
+              22.815
+            ],
+            [
+              89.558,
+              22.822
             ]
           ]
         ]
@@ -58,49 +67,55 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_khalishpur",
       "properties": {
-        "zone_name": "Khalishpur Industrial & Residential Sector",
-        "admin_code": "KCC-KHALISHPUR",
-        "area_sqkm": 11.85,
+        "sector_id": "KCC-KHALISHPUR",
+        "sector_name": "Khalishpur Industrial & Residential Sector",
         "area_hectares": 1185,
+        "area_sqkm": 11.85,
         "population": 240000,
         "population_density": 20253,
         "elevation_m": 3.8,
         "landmarks": "Newsprint Mills, Platinum Jubilee Jute Mills, Peoples Golchattar",
         "mean_lst_c": 37.2,
         "mean_ndvi": 0.18,
-        "mean_ndbi": 0.28,
+        "built_up_pct": 65.1,
+        "canopy_pct": 18.5,
+        "water_pct": 16.4,
         "climate_risk_score": 81,
-        "risk_tier": "Extreme"
+        "risk_tier": "Extreme Risk",
+        "recommendation": "Industrial Thermal Retrofitting: Implement green buffer zones around heavy industrial complexes and jute mill quarters."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.52,
-              22.845
-            ],
-            [
-              89.548,
-              22.845
+              89.535,
+              22.868
             ],
             [
               89.552,
-              22.875
+              22.871
             ],
             [
-              89.53,
-              22.88
+              89.56,
+              22.852
             ],
             [
-              89.512,
-              22.865
+              89.548,
+              22.838
             ],
             [
-              89.52,
-              22.845
+              89.532,
+              22.842
+            ],
+            [
+              89.525,
+              22.858
+            ],
+            [
+              89.535,
+              22.868
             ]
           ]
         ]
@@ -108,49 +123,55 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_sonadanga",
       "properties": {
-        "zone_name": "Sonadanga Transport & Residential Hub",
-        "admin_code": "KCC-SONADANGA",
-        "area_sqkm": 8.15,
+        "sector_id": "KCC-SONADANGA",
+        "sector_name": "Sonadanga Transport & Residential Hub",
         "area_hectares": 815,
+        "area_sqkm": 8.15,
         "population": 185000,
         "population_density": 22699,
         "elevation_m": 4.2,
         "landmarks": "Sonadanga Central Bus Terminal, Solar Park, Boyra Main Road Junction",
         "mean_lst_c": 35.1,
         "mean_ndvi": 0.26,
-        "mean_ndbi": 0.16,
+        "built_up_pct": 58.2,
+        "canopy_pct": 28.1,
+        "water_pct": 13.7,
         "climate_risk_score": 67,
-        "risk_tier": "High"
+        "risk_tier": "High Risk",
+        "recommendation": "Transit Heat Shading: Install solar-reflective transit shelters and roadside tree corridors along bus terminal arteries."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.53,
-              22.815
+              89.522,
+              22.835
             ],
             [
-              89.55,
-              22.815
+              89.542,
+              22.836
             ],
             [
               89.548,
-              22.838
+              22.821
             ],
             [
-              89.526,
-              22.838
+              89.538,
+              22.81
             ],
             [
-              89.522,
+              89.518,
+              22.812
+            ],
+            [
+              89.515,
               22.825
             ],
             [
-              89.53,
-              22.815
+              89.522,
+              22.835
             ]
           ]
         ]
@@ -158,21 +179,23 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_boyra",
       "properties": {
-        "zone_name": "Boyra & Mujgunni Civic-Medical Sector",
-        "admin_code": "KCC-BOYRA",
-        "area_sqkm": 5.3,
+        "sector_id": "KCC-BOYRA",
+        "sector_name": "Boyra & Mujgunni Civic-Medical Sector",
         "area_hectares": 530,
+        "area_sqkm": 5.3,
         "population": 115000,
         "population_density": 21698,
         "elevation_m": 4.5,
         "landmarks": "Khulna Medical College Hospital, Mujgunni Residential, Police Lines",
         "mean_lst_c": 34.4,
         "mean_ndvi": 0.29,
-        "mean_ndbi": 0.12,
+        "built_up_pct": 52.0,
+        "canopy_pct": 32.5,
+        "water_pct": 15.5,
         "climate_risk_score": 59,
-        "risk_tier": "Moderate"
+        "risk_tier": "Moderate Risk",
+        "recommendation": "Civic Microclimate Buffering: Plant native bioswales and micro-forests on hospital and educational campus grounds."
       },
       "geometry": {
         "type": "Polygon",
@@ -180,23 +203,27 @@
           [
             [
               89.528,
-              22.835
-            ],
-            [
-              89.548,
-              22.835
-            ],
-            [
-              89.548,
               22.855
             ],
             [
-              89.525,
-              22.855
+              89.545,
+              22.854
+            ],
+            [
+              89.548,
+              22.838
+            ],
+            [
+              89.532,
+              22.836
+            ],
+            [
+              89.521,
+              22.845
             ],
             [
               89.528,
-              22.835
+              22.855
             ]
           ]
         ]
@@ -204,45 +231,51 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_gollamari",
       "properties": {
-        "zone_name": "Gollamari & Khulna University Sector",
-        "admin_code": "KCC-GOLLAMARI",
-        "area_sqkm": 6.9,
+        "sector_id": "KCC-GOLLAMARI",
+        "sector_name": "Gollamari & Khulna University Sector",
         "area_hectares": 690,
+        "area_sqkm": 6.9,
         "population": 75000,
         "population_density": 10869,
         "elevation_m": 3.2,
         "landmarks": "Khulna University Campus, Mayur River Bridge, Gollamari Memorial",
         "mean_lst_c": 32.5,
         "mean_ndvi": 0.41,
-        "mean_ndbi": -0.04,
+        "built_up_pct": 38.5,
+        "canopy_pct": 44.0,
+        "water_pct": 17.5,
         "climate_risk_score": 48,
-        "risk_tier": "Moderate"
+        "risk_tier": "Moderate Risk",
+        "recommendation": "Canopy Conservation: Expand university botanical corridors and preserve the Mayur River ecological setback."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [
           [
             [
-              89.515,
-              22.79
+              89.52,
+              22.81
+            ],
+            [
+              89.54,
+              22.811
             ],
             [
               89.545,
               22.795
             ],
             [
-              89.54,
-              22.815
+              89.528,
+              22.788
             ],
             [
-              89.51,
-              22.812
+              89.512,
+              22.796
             ],
             [
-              89.515,
-              22.79
+              89.52,
+              22.81
             ]
           ]
         ]
@@ -250,21 +283,23 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_rupsha",
       "properties": {
-        "zone_name": "Rupsha Riverfront & Wetland Buffer",
-        "admin_code": "KCC-RUPSHA",
-        "area_sqkm": 9.2,
+        "sector_id": "KCC-RUPSHA",
+        "sector_name": "Rupsha Riverfront & Wetland Buffer",
         "area_hectares": 920,
+        "area_sqkm": 9.2,
         "population": 92000,
         "population_density": 10000,
         "elevation_m": 2.8,
         "landmarks": "Khan Jahan Ali (Rupsha) Bridge, Fish Processing Zone, Rupsha Ghat",
         "mean_lst_c": 31.8,
         "mean_ndvi": 0.44,
-        "mean_ndbi": -0.08,
+        "built_up_pct": 34.0,
+        "canopy_pct": 46.5,
+        "water_pct": 19.5,
         "climate_risk_score": 51,
-        "risk_tier": "Moderate"
+        "risk_tier": "Moderate Risk",
+        "recommendation": "Tidal Wetland Preservation: Restrict landfill encroachment along tidal canals to maintain convective river cooling."
       },
       "geometry": {
         "type": "Polygon",
@@ -272,23 +307,27 @@
           [
             [
               89.56,
-              22.775
+              22.802
             ],
             [
-              89.595,
-              22.78
+              89.582,
+              22.804
             ],
             [
-              89.59,
-              22.808
+              89.588,
+              22.782
             ],
             [
               89.565,
-              22.805
+              22.778
+            ],
+            [
+              89.548,
+              22.788
             ],
             [
               89.56,
-              22.775
+              22.802
             ]
           ]
         ]
@@ -296,21 +335,23 @@
     },
     {
       "type": "Feature",
-      "id": "khulna_daulatpur",
       "properties": {
-        "zone_name": "Daulatpur Riverport & Northern Hub",
-        "admin_code": "KCC-DAULATPUR",
-        "area_sqkm": 7.6,
+        "sector_id": "KCC-DAULATPUR",
+        "sector_name": "Daulatpur Riverport & Northern Hub",
         "area_hectares": 760,
+        "area_sqkm": 7.6,
         "population": 130000,
         "population_density": 17105,
         "elevation_m": 4.1,
         "landmarks": "Daulatpur College, River Jetty, BL College Campus",
         "mean_lst_c": 36.1,
         "mean_ndvi": 0.22,
-        "mean_ndbi": 0.21,
+        "built_up_pct": 61.5,
+        "canopy_pct": 23.0,
+        "water_pct": 15.5,
         "climate_risk_score": 73,
-        "risk_tier": "High"
+        "risk_tier": "High Risk",
+        "recommendation": "Portside Microclimate Interventions: Introduce permeable pavements and green cargo staging canopies."
       },
       "geometry": {
         "type": "Polygon",
@@ -318,23 +359,27 @@
           [
             [
               89.515,
+              22.89
+            ],
+            [
+              89.538,
+              22.895
+            ],
+            [
+              89.548,
               22.875
             ],
             [
-              89.54,
-              22.875
-            ],
-            [
-              89.545,
-              22.905
+              89.53,
+              22.865
             ],
             [
               89.51,
-              22.905
+              22.872
             ],
             [
               89.515,
-              22.875
+              22.89
             ]
           ]
         ]

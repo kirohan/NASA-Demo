@@ -1,0 +1,41 @@
+{
+  "collection": "NASA & Copernicus Earth Observation Pipeline",
+  "sources": [
+    {
+      "parameter": "Land Surface Temperature (LST)",
+      "sensor": "Landsat 8/9 OLI/TIRS & Terra MODIS (MOD11A2)",
+      "spatial_resolution": "30m (TIRS Band 10 resampled) / 1000m",
+      "temporal_resolution": "16-day Landsat / 8-day composite MODIS",
+      "provider": "NASA LP DAAC / USGS EROS",
+      "formula": "LST = Tb / (1 + (lambda * Tb / rho) * ln(e)) - 273.15"
+    },
+    {
+      "parameter": "Vegetation Health (NDVI)",
+      "sensor": "Sentinel-2 MSI Level-2A & Terra MODIS (MOD13Q1)",
+      "spatial_resolution": "10m (Sentinel-2) / 250m (MODIS)",
+      "temporal_resolution": "5-day Sentinel-2 / 16-day MODIS",
+      "provider": "European Space Agency / NASA LP DAAC",
+      "formula": "NDVI = (B8_NIR - B4_RED) / (B8_NIR + B4_RED)"
+    },
+    {
+      "parameter": "Atmospheric & Climate Variables",
+      "sensor": "AIRS & MERRA-2",
+      "spatial_resolution": "0.5\u00b0 x 0.625\u00b0",
+      "provider": "NASA Giovanni (Goddard Earth Sciences DISC)",
+      "purpose": "Decadal atmospheric humidity and solar radiance cross-validation"
+    },
+    {
+      "parameter": "Urban Change & Multi-Sensor Extraction",
+      "system": "NASA AppEEARS",
+      "provider": "NASA Earth Science Data and Information System (ESDIS)",
+      "purpose": "Point and area extraction for rapid decadal raster processing"
+    },
+    {
+      "parameter": "Demographic & Exposure Modeling",
+      "system": "WorldPop Global High Resolution Population Denominators",
+      "spatial_resolution": "100m constrained building-density grid",
+      "provider": "WorldPop / University of Southampton",
+      "purpose": "Spatial exposure normalization for vulnerable communities"
+    }
+  ]
+}

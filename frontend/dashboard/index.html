@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SURF — Satellite Urban Resilience Framework | NASA Space Apps 2026</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Custom NASA Mission-Control Glassmorphic CSS -->
+  <link rel="stylesheet" href="styles.css?v=2026.5.0" />
+</head>
+<body>
+    <!-- NASA MISSION CONTROL HEADER -->
+    <!-- NASA MISSION CONTROL HEADER (WIDE 2-TIER ARCHITECTURE) -->
+  <header class="nasa-header">
+    <!-- TIER 1: BRAND IDENTITY & SYSTEM TELEMETRY -->
+    <div class="header-top-bar">
+      <div class="header-brand-wrap">
+        <div class="nasa-badge" title="NASA Earth Science Division">
+          <span class="meatball">NASA</span>
+          <span class="badge-sub">SPACE APPS 2026</span>
+        </div>
+        <div class="platform-title">
+          <div class="title-row">
+            <h1>SURF <span class="sub-title">// SATELLITE URBAN RESILIENCE FRAMEWORK</span></h1>
+            <span class="classification-pill"><i class="fa-solid fa-satellite"></i> EO-OPS HUD</span>
+          </div>
+          <p class="tagline">Decadal Remote Sensing Microclimate Intelligence &bull; Landsat 8/9 &bull; Sentinel-2 &bull; MODIS</p>
+        </div>
+      </div>
+      
+      <div class="header-telemetry-wrap">
+        <div class="mission-telemetry-box">
+          <div class="telemetry-row">
+            <span class="status-pip pulse-green"></span>
+            <span class="telemetry-label">STATUS:</span>
+            <span class="header-status-val text-green" id="telemetryStatus">NOMINAL // LEVEL-2A</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-label">UTC:</span>
+            <span class="header-clock-val" id="missionUtcClock">2026-10-10 10:00:43Z</span>
+          </div>
+        </div>
+
+        <button id="btnQuickReport" class="btn-nasa-primary" title="Export Executive PDF Intelligence Briefing">
+          <i class="fa-solid fa-file-pdf"></i> <span>Export Brief (PDF)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TIER 2: MISSION ACTION TOOLS, TESTBED & SENSOR TICKER -->
+    <div class="header-action-bar">
+      <!-- 1. Dedicated Khulna Delta Testbed Selector -->
+      <div class="city-selector-wrap">
+        <label for="citySelector"><i class="fa-solid fa-location-crosshairs text-cyan"></i> TESTBED FOCUS:</label>
+        <select id="citySelector">
+          <option value="khulna" selected>Khulna Delta, Bangladesh (All Sectors Overview)</option>
+          <option value="KCC-SADAR">Khulna Sadar (Kotwali Urban Core)</option>
+          <option value="KCC-KHALISHPUR">Khalishpur Industrial Sector</option>
+          <option value="KCC-SONADANGA">Sonadanga Transport Corridor</option>
+          <option value="KCC-DAULATPUR">Daulatpur Riverport & Northern Hub</option>
+          <option value="KCC-RUPSHA">Rupsha Riverfront & Wetland Buffer</option>
+          <option value="KCC-BOYRA">Boyra Civic-Medical Sector</option>
+          <option value="KCC-GOLLAMARI">Gollamari & University Sector</option>
+        </select>
+      </div>
+
+      <div class="action-divider"></div>
+
+      <!-- Action Tools Navigation Group (Guaranteed horizontal layout) -->
+      <div class="header-tools-group">
+        <button id="btnExploreDemo" class="btn-nasa-hud btn-demo" title="Launch Interactive 60-Second Guided Demo for Judges">
+          <i class="fa-solid fa-circle-play"></i> <span>Explore SURF Demo</span>
+        </button>
+
+        <button id="btnToggleCompare" class="btn-nasa-hud btn-compare" title="Toggle 2015 Baseline vs 2026 Swipe Comparison">
+          <i class="fa-solid fa-arrows-split-up-and-left"></i> <span>2015 ↔ 2026 Swipe</span>
+        </button>
+
+        <button id="btnOpenSimulator" class="btn-nasa-hud btn-sim" title="Launch Future Scenario Simulator">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Scenario Simulator</span>
+        </button>
+
+        <button id="btnCredibility" class="btn-nasa-hud" title="Scientific Data Provenance &amp; Methodology Credibility">
+          <i class="fa-solid fa-award"></i> <span>Data &amp; Methodology</span>
+        </button>
+
+        <button id="btnStoryModal" class="btn-nasa-hud btn-story" title="Launch Delta Climate Narrative Dossier">
+          <i class="fa-solid fa-book-atlas"></i> <span>Mission Dossier</span>
+        </button>
+      </div>
+
+      <div class="action-divider"></div>
+
+      <!-- Sensor Status Ticker Strip -->
+      <div class="header-ticker-strip">
+        <div class="ticker-item"><i class="fa-solid fa-circle-radiation text-cyan"></i> LANDSAT 8/9 TIRS: <strong>Band 10 (10.895 µm) Radiance Inversion Active</strong></div>
+        <div class="ticker-divider">|</div>
+        <div class="ticker-item"><i class="fa-solid fa-seedling text-green"></i> SENTINEL-2 MSI: <strong>10m Red/NIR (B4/B8) Top-of-Canopy L2A Synced</strong></div>
+        <div class="ticker-divider">|</div>
+        <div class="ticker-item"><i class="fa-solid fa-chart-line text-amber"></i> MODIS TERRA/AQUA: <strong>MOD11A2 / MOD13Q1 Decadal Trend Calibrated</strong></div>
+        <div class="ticker-divider">|</div>
+        <div class="ticker-item"><i class="fa-solid fa-layer-group text-cyan"></i> MCDA WEIGHTS: <strong>Heat 35% &bull; Canopy 25% &bull; Built-Up 20% &bull; Pop 20%</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3-PANE MISSION CONTROL DASHBOARD LAYOUT -->
+  <div class="dashboard-container">
+    
+    <!-- LEFT PANE: GIS CONTROLS & MULTI-LAYER OPACITY -->
+    <aside class="sidebar-left gis-controls-panel">
+      <div class="panel-section-title">
+        <i class="fa-solid fa-crosshairs"></i> EARTH OBSERVATION GIS CONTROLS
+      </div>
+      
+      <!-- Basemap Selector -->
+      <div class="control-box">
+        <div class="control-box-header">
+          <label class="control-subhead">BASEMAP TILES</label>
+          <span class="subhead-meta">WGS84 / Spherical Mercator</span>
+        </div>
+        <div class="radio-group">
+          <label class="radio-item">
+            <input type="radio" name="basemap" value="google-hybrid" checked>
+            <span><i class="fa-solid fa-satellite"></i> Google Hybrid (Satellite + Road)</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="basemap" value="osm">
+            <span><i class="fa-solid fa-map"></i> OpenStreetMap (Cartographic)</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="basemap" value="carto-dark">
+            <span><i class="fa-solid fa-circle-half-stroke"></i> Carto Dark Matter (High Contrast)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Raster Visualization Engine Mode Toggle -->
+      <div class="control-box">
+        <div class="control-box-header">
+          <label class="control-subhead">SATELLITE RASTER ENGINE</label>
+          <span class="subhead-meta" id="rasterModeLabel">Continuous 2D Surface</span>
+        </div>
+        <div class="mode-toggle-group">
+          <button id="btnRasterMode" class="btn-mode-toggle active" title="Render Continuous Remote Sensing 2D Raster Overlays">
+            <i class="fa-solid fa-cubes"></i> <span>Continuous Raster</span>
+          </button>
+          <button id="btnPointMode" class="btn-mode-toggle" title="Render Interpolated Point Sample Mesh">
+            <i class="fa-solid fa-braille"></i> <span>Sampled Points</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Environmental Layers with Individual Opacity Controls -->
+      <div class="control-box">
+        <div class="control-box-header">
+          <label class="control-subhead">EARTH OBSERVATION LAYERS &amp; OPACITY</label>
+          <button id="btnResetOpacity" class="btn-micro" title="Reset all layer opacities to default">Reset</button>
+        </div>
+        
+        <!-- Layer A: Thermal Heat (LST) -->
+        <div class="layer-control-card">
+          <div class="layer-main-row">
+            <label class="checkbox-layer">
+              <input type="checkbox" id="layerHeat" checked>
+              <span class="chk-box"></span>
+              <div class="layer-info">
+                <span class="layer-name"><i class="fa-solid fa-temperature-high color-heat"></i> Landsat LST Heat Raster</span>
+                <span class="layer-meta">Landsat 8/9 TIRS Band 10 &bull; Calibrated LST (°C)</span>
+              </div>
+            </label>
+          </div>
+          <div class="layer-opacity-row">
+            <span class="opacity-label"><i class="fa-solid fa-sliders"></i> Opacity:</span>
+            <input type="range" id="heatOpacitySlider" min="0" max="100" value="85" class="range-slider mini">
+            <span id="heatOpacityVal" class="opacity-readout">85%</span>
+          </div>
+        </div>
+
+        <!-- Layer B: Vegetation Health (NDVI) -->
+        <div class="layer-control-card">
+          <div class="layer-main-row">
+            <label class="checkbox-layer">
+              <input type="checkbox" id="layerVeg" checked>
+              <span class="chk-box"></span>
+              <div class="layer-info">
+                <span class="layer-name"><i class="fa-solid fa-leaf color-veg"></i> Sentinel-2 NDVI Raster</span>
+                <span class="layer-meta">Copernicus MSI Level-2A &bull; Fractional Canopy Index</span>
+              </div>
+            </label>
+          </div>
+          <div class="layer-opacity-row">
+            <span class="opacity-label"><i class="fa-solid fa-sliders"></i> Opacity:</span>
+            <input type="range" id="vegOpacitySlider" min="0" max="100" value="75" class="range-slider mini">
+            <span id="vegOpacityVal" class="opacity-readout">75%</span>
+          </div>
+        </div>
+
+        <!-- Layer C: Urban Expansion Layer -->
+        <div class="layer-control-card">
+          <div class="layer-main-row">
+            <label class="checkbox-layer">
+              <input type="checkbox" id="layerUrban" checked>
+              <span class="chk-box"></span>
+              <div class="layer-info">
+                <span class="layer-name"><i class="fa-solid fa-city color-urban"></i> Decadal Urban Expansion</span>
+                <span class="layer-meta">2015 Baseline vs 2026 Current Infill</span>
+              </div>
+            </label>
+          </div>
+          <div class="layer-opacity-row">
+            <span class="opacity-label"><i class="fa-solid fa-sliders"></i> Opacity:</span>
+            <input type="range" id="urbanOpacitySlider" min="0" max="100" value="65" class="range-slider mini">
+            <span id="urbanOpacityVal" class="opacity-readout">65%</span>
+          </div>
+        </div>
+
+        <!-- Layer D: Climate Risk Layer (MCDA) -->
+        <div class="layer-control-card">
+          <div class="layer-main-row">
+            <label class="checkbox-layer">
+              <input type="checkbox" id="layerRisk" checked>
+              <span class="chk-box"></span>
+              <div class="layer-info">
+                <span class="layer-name"><i class="fa-solid fa-shield-halved color-risk"></i> Climate Risk Layer (MCDA)</span>
+                <span class="layer-meta">Heat + Canopy + Density + Population</span>
+              </div>
+            </label>
+          </div>
+          <div class="layer-opacity-row">
+            <span class="opacity-label"><i class="fa-solid fa-sliders"></i> Opacity:</span>
+            <input type="range" id="riskOpacitySlider" min="0" max="100" value="70" class="range-slider mini">
+            <span id="riskOpacityVal" class="opacity-readout">70%</span>
+          </div>
+        </div>
+
+        <!-- Layer 5: Administrative Sector Boundaries (GeoJSON) -->
+        <div class="layer-control-card">
+          <div class="layer-main-row">
+            <label class="checkbox-layer">
+              <input type="checkbox" id="layerBoundaries" checked>
+              <span class="chk-box"></span>
+              <div class="layer-info">
+                <span class="layer-name"><i class="fa-solid fa-draw-polygon color-admin"></i> Khulna Sector Boundaries</span>
+                <span class="layer-meta">KCC Municipal Planning Sectors</span>
+              </div>
+            </label>
+          </div>
+          <div class="layer-opacity-row">
+            <span class="opacity-label"><i class="fa-solid fa-sliders"></i> Opacity:</span>
+            <input type="range" id="boundaryOpacitySlider" min="0" max="100" value="40" class="range-slider mini">
+            <span id="boundaryOpacityVal" class="opacity-readout">40%</span>
+          </div>
+          <div class="layer-choropleth-row">
+            <span class="opacity-label"><i class="fa-solid fa-palette"></i> Thematic:</span>
+            <select id="choroplethModeSelect" class="select-mini">
+              <option value="risk" selected>Risk Score (MCDA)</option>
+              <option value="lst">Thermal LST (°C)</option>
+              <option value="ndvi">Canopy NDVI</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Master Opacity Slider (Fallback) -->
+        <div class="master-opacity-wrap" style="display:none;">
+          <input type="range" id="opacitySlider" min="10" max="100" value="75">
+          <span id="opacityVal">75%</span>
+        </div>
+      </div>
+
+      <!-- Professional Scientific Legends Box -->
+      <div class="control-box legend-box">
+        <div class="control-box-header">
+          <label class="control-subhead"><i class="fa-solid fa-chart-simple"></i> SCIENTIFIC COLOR RAMPS</label>
+          <span class="subhead-meta">Calibrated Scales</span>
+        </div>
+        
+        <!-- Legend A: Thermal LST Legend -->
+        <div class="legend-group">
+          <div class="legend-title-row">
+            <span class="legend-title"><i class="fa-solid fa-temperature-three-quarters color-heat"></i> Land Surface Temp (LST &deg;C)</span>
+            <span class="legend-badge">Landsat 8/9 TIRS</span>
+          </div>
+          <div class="color-ramp-bar heat-ramp"></div>
+          <div class="ramp-ticks">
+            <span>&lt;31&deg;C (Blue)</span>
+            <span>34&deg;C (Yellow)</span>
+            <span>36&deg;C (Orange)</span>
+            <span>&gt;38&deg;C (Red)</span>
+          </div>
+        </div>
+
+        <!-- Legend B: NDVI Canopy Health Legend -->
+        <div class="legend-group">
+          <div class="legend-title-row">
+            <span class="legend-title"><i class="fa-solid fa-leaf color-veg"></i> Vegetation Health (NDVI)</span>
+            <span class="legend-badge">Sentinel-2 MSI</span>
+          </div>
+          <div class="color-ramp-bar ndvi-ramp"></div>
+          <div class="ramp-ticks">
+            <span>Water (Blue)</span>
+            <span>Low (Yellow)</span>
+            <span>Mod (Light Green)</span>
+            <span>Dense (Dark Green)</span>
+          </div>
+        </div>
+
+        <!-- Legend C: Urban Expansion Decadal Legend -->
+        <div class="legend-group">
+          <div class="legend-title-row">
+            <span class="legend-title"><i class="fa-solid fa-city color-urban"></i> Urban Expansion (2015 vs 2026)</span>
+            <span class="legend-badge">Khulna Infill</span>
+          </div>
+          <div class="urban-stage-swatches">
+            <div class="swatch-item"><span class="swatch-chip stage-core"></span> Pre-2015 Baseline Core</div>
+            <div class="swatch-item"><span class="swatch-chip stage-mid"></span> 2016-2020 Corridor Infill</div>
+            <div class="swatch-item"><span class="swatch-chip stage-late"></span> 2021-2026 Impervious Growth</div>
+            <div class="swatch-item"><span class="swatch-chip stage-fringe"></span> Peri-Urban Fringes</div>
+          </div>
+        </div>
+
+        <!-- Legend D: Climate Risk Layer Categorical Swatches -->
+        <div class="legend-group">
+          <div class="legend-title-row">
+            <span class="legend-title"><i class="fa-solid fa-shield-halved color-risk"></i> Climate Risk Layer (MCDA)</span>
+            <span class="legend-badge">Composite</span>
+          </div>
+          <div class="risk-tier-swatches">
+            <div class="swatch-item"><span class="swatch-chip tier-resilient"></span> Low Risk: Green (&lt;50)</div>
+            <div class="swatch-item"><span class="swatch-chip tier-moderate"></span> Moderate: Yellow (50&ndash;64)</div>
+            <div class="swatch-item"><span class="swatch-chip tier-high"></span> High: Orange (65&ndash;79)</div>
+            <div class="swatch-item"><span class="swatch-chip tier-extreme"></span> Extreme: Red (&ge;80)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Spatial Inspection Hint -->
+      <div class="inspection-tip">
+        <i class="fa-solid fa-satellite-dish text-cyan"></i>
+        <span><strong>Live Spatial Probe:</strong> Click any ward boundary or pixel coordinate on the map to inspect live multi-sensor physical properties.</span>
+      </div>
+    </aside>
+
+    <!-- CENTER PANE: INTERACTIVE HUD MAP VIEWPORT -->
+    <main class="map-center-container">
+      <div id="map" class="surf-map"></div>
+
+      <!-- 6. Guided Demo Tour HUD for Judges -->
+      <div id="demoTourCard" class="demo-tour-hud hidden">
+        <div class="tour-header">
+          <span class="tour-badge" id="tourStepBadge">JUDGES DEMO &bull; STEP 1 OF 4</span>
+          <button id="btnCloseTour" class="btn-close-tour" title="Exit Guided Demo"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <h4 id="tourStepTitle">1. Extreme Thermal Hazard Hotspot</h4>
+        <p id="tourStepDesc">Focusing on Khulna Sadar (Kotwali Core). Low-elevation corrugated tin roofs trap solar insolation, elevating surface LST to 37.8&deg;C (+4.9&deg;C decadal anomaly). Notice the cool Bhairab river corridor providing natural evaporative cooling.</p>
+        <div class="tour-actions">
+          <button id="btnTourPrev" class="btn-micro" disabled><i class="fa-solid fa-arrow-left"></i> Prev</button>
+          <div class="tour-dots">
+            <span class="tdot active" data-step="1"></span>
+            <span class="tdot" data-step="2"></span>
+            <span class="tdot" data-step="3"></span>
+            <span class="tdot" data-step="4"></span>
+          </div>
+          <button id="btnTourNext" class="btn-micro primary">Next <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Toast Notification Container -->
+      <div id="toastContainer" class="toast-container"></div>
+
+      <!-- North Arrow HUD Compass -->
+      <div class="north-arrow-hud" title="True Geodetic North (WGS 84 / EGM96)">
+        <span class="compass-n">N</span>
+        <div class="compass-pointer"><i class="fa-solid fa-location-arrow"></i></div>
+      </div>
+
+      <!-- Raster Loading Indicator HUD Overlay -->
+      <div id="rasterLoadingIndicator" class="raster-loading-hud hidden">
+        <i class="fa-solid fa-satellite-dish fa-spin text-cyan"></i>
+        <span>STREAMING SATELLITE RASTER...</span>
+      </div>
+
+      <!-- 2015 ↔ 2026 Interactive Swipe Comparison Overlay -->
+      <div id="swipeContainer" class="swipe-container hidden">
+        <div class="swipe-labels">
+          <span class="swipe-tag left"><i class="fa-solid fa-clock-rotate-left"></i> 2015 BASELINE (LST 31.2°C &bull; Veg 52.4%)</span>
+          <span class="swipe-tag right"><i class="fa-solid fa-satellite"></i> 2026 CURRENT (LST 36.1°C &bull; Veg 24.0%)</span>
+        </div>
+        <div id="swipeDivider" class="swipe-divider">
+          <div class="swipe-handle">
+            <i class="fa-solid fa-arrows-left-right"></i>
+          </div>
+          <div class="swipe-line"></div>
+        </div>
+      </div>
+
+      <!-- Map HUD Toolbar Overlay (Top Right) -->
+      <div class="map-hud-toolbar">
+        <!-- 2. NASA Analysis Mode Button with Active Status Pip -->
+        <button id="btnAnalysisMode" class="hud-tool-btn active" title="Toggle NASA Satellite Analysis Reticle &amp; Ground Probe">
+          <span class="analysis-pulse-pip"></span>
+          <i class="fa-solid fa-crosshairs"></i> <span>Analysis Mode</span>
+        </button>
+        <button id="btnRecenterMap" class="hud-tool-btn" title="Recenter to Khulna Delta Bounding Box">
+          <i class="fa-solid fa-crosshairs"></i> Recenter
+        </button>
+        <button id="btnToggleLabels" class="hud-tool-btn" title="Toggle Sector Name Labels">
+          <i class="fa-solid fa-tag"></i> Labels
+        </button>
+        <button id="btnFullscreenMap" class="hud-tool-btn" title="Toggle Fullscreen Mode">
+          <i class="fa-solid fa-expand"></i> Fullscreen
+        </button>
+      </div>
+      
+      <!-- 2015 ↔ 2026 Comparison Floating Banner -->
+      <div id="comparisonBanner" class="comparison-banner hidden">
+        <div class="comp-col comp-2015">
+          <span class="comp-year"><i class="fa-solid fa-clock-rotate-left"></i> 2015 BASELINE</span>
+          <span class="comp-stat">Temp: <strong>31.2&deg;C</strong> &bull; Veg: <strong>52.4%</strong> &bull; Urban: <strong>32.1%</strong></span>
+        </div>
+        <div class="comp-vs">
+          <button id="btnSwipeBaseline" class="btn-micro-chip" title="View 2015 Full Frame">2015</button>
+          <span>SWIPE</span>
+          <button id="btnSwipeCurrent" class="btn-micro-chip active" title="View 2026 Full Frame">2026</button>
+        </div>
+        <div class="comp-col comp-2026">
+          <span class="comp-year"><i class="fa-solid fa-satellite"></i> 2026 CURRENT</span>
+          <span class="comp-stat">Temp: <strong>36.1&deg;C</strong> &bull; Veg: <strong>24.0%</strong> &bull; Urban: <strong>64.2%</strong></span>
+        </div>
+        <div class="comp-deltas">
+          <span class="delta-badge bad" title="Surface Temperature Increase"><i class="fa-solid fa-arrow-up"></i> Temp &uarr; +4.9&deg;C</span>
+          <span class="delta-badge bad" title="Tree Canopy Depletion"><i class="fa-solid fa-arrow-down"></i> Veg &darr; &minus;28.4%</span>
+          <span class="delta-badge bad" title="Impervious Built-Up Growth"><i class="fa-solid fa-arrow-up"></i> Urban &uarr; +32.1%</span>
+        </div>
+        <button id="btnCloseCompare" class="btn-close-comp" title="Close Swipe Comparison Mode"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Map Overlay Crosshair & Monospace Telemetry Coordinates Bar -->
+      <div class="map-coordinates-bar">
+        <div class="coord-item">
+          <i class="fa-solid fa-location-dot text-cyan"></i>
+          <span>LAT: <strong id="cursorLat">22.8456</strong>&deg; N &bull; LON: <strong id="cursorLon">89.5403</strong>&deg; E</span>
+        </div>
+        <div class="coord-item">
+          <i class="fa-solid fa-mountain text-amber"></i>
+          <span>ELEVATION: <strong>3.5 m ASL</strong> (Khulna Deltaic Plain)</span>
+        </div>
+        <div class="coord-item">
+          <i class="fa-solid fa-magnifying-glass text-cyan"></i>
+          <span>ZOOM: <strong id="mapZoomVal">13</strong></span>
+        </div>
+        <div class="coord-item">
+          <i class="fa-solid fa-compass text-green"></i>
+          <span>DATUM: <strong>WGS 84 / EGM96</strong></span>
+        </div>
+      </div>
+    </main>
+
+    <!-- RIGHT PANE: MISSION CONTROL ANALYSIS & RESILIENCE HUD -->
+    <aside class="sidebar-right analysis-dashboard-panel">
+      <!-- Sector Identification Card -->
+      <div class="sector-header-card hud-card">
+        <div class="sector-badge-row">
+          <span id="sectorCode" class="badge-code">KCC-SADAR</span>
+          <span id="riskTierBadge" class="badge-risk-extreme"><span class="pulse-indicator"></span> Extreme Risk</span>
+        </div>
+        <h2 id="sectorName">Khulna Sadar (Kotwali Core)</h2>
+        <p id="sectorLandmarks" class="sector-sub"><i class="fa-solid fa-landmark"></i> Bhairab Riverfront, Picture Palace Mor, Dakbangla</p>
+        <div class="sector-meta-strip">
+          <span><i class="fa-solid fa-arrows-to-dot"></i> Area: <strong id="totalAreaSqkm">6.45 km²</strong> <small id="totalAreaHa">(645 ha)</small></span>
+          <span><i class="fa-solid fa-users"></i> Pop: <strong id="statPopDensity">30,232</strong>/km²</span>
+        </div>
+      </div>
+
+      <!-- Land Cover Proportional Breakdown -->
+      <div class="analysis-card hud-card">
+        <div class="card-title">
+          <i class="fa-solid fa-chart-pie color-cyan"></i> LAND COVER PARTITION (10m RESOLUTION)
+        </div>
+        
+        <div class="breakdown-bar">
+          <div id="barBuiltUp" class="bar-seg built-up" style="width: 68%;" title="Built-up Impervious"></div>
+          <div id="barCanopy" class="bar-seg canopy" style="width: 14%;" title="Tree Canopy"></div>
+          <div id="barWater" class="bar-seg water" style="width: 18%;" title="Water Bodies"></div>
+        </div>
+
+        <div class="breakdown-legend">
+          <div class="leg-item"><span class="dot built-up"></span> Built-up: <strong id="valBuiltUp">68.4% (441 ha)</strong></div>
+          <div class="leg-item"><span class="dot canopy"></span> Tree Canopy: <strong id="valCanopy">14.2% (92 ha)</strong></div>
+          <div class="leg-item"><span class="dot water"></span> Water: <strong id="valWater">17.4% (112 ha)</strong></div>
+        </div>
+      </div>
+
+      <!-- Live Satellite Telemetry Stats Grid -->
+      <div class="telemetry-grid">
+        <div class="telemetry-card hud-card">
+          <div class="telemetry-label"><i class="fa-solid fa-temperature-high color-heat"></i> MEAN LST (TEMP)</div>
+          <div class="telemetry-val" id="statLst">37.8 <small>&deg;C</small></div>
+          <div class="telemetry-sub" id="statLstDelta"><i class="fa-solid fa-arrow-trend-up"></i> +4.9&deg;C vs 2015 Baseline</div>
+        </div>
+        <div class="telemetry-card hud-card">
+          <div class="telemetry-label"><i class="fa-solid fa-seedling color-veg"></i> MEAN CANOPY NDVI</div>
+          <div class="telemetry-val" id="statNdvi">0.14 <small>NDVI</small></div>
+          <div class="telemetry-sub" id="statNdviHealth">Degraded / Low Canopy</div>
+        </div>
+        <div class="telemetry-card hud-card wide">
+          <div class="telemetry-label"><i class="fa-solid fa-arrow-trend-up color-urban"></i> DECADAL URBAN EXPANSION (2015&ndash;2026)</div>
+          <div class="telemetry-val" id="statExpansion">+124.6 <small>%</small></div>
+          <div class="telemetry-sub">Corrugated tin &amp; concrete infill replacing delta retention channels</div>
+        </div>
+      </div>
+
+      <!-- 5. CLIMATE RISK EXPLANATION MODULE (Clickable Card) -->
+      <div class="analysis-card risk-card hud-card interactive-risk-card" id="cardClimateRisk" title="Click to view full MCDA mathematical explanation popup">
+        <div class="card-title-row">
+          <div class="card-title">
+            <i class="fa-solid fa-shield-halved color-cyan"></i> CLIMATE RISK SCORE (MCDA)
+          </div>
+          <button id="btnExplainRisk" class="btn-micro-info" title="View Full Mathematical MCDA Formulation">
+            <i class="fa-solid fa-circle-question"></i> Explain Score
+          </button>
+        </div>
+        
+        <div class="score-display-row">
+          <div class="hud-score-gauge" id="gaugeClickTrigger">
+            <svg class="gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg" cx="50" cy="50" r="42"></circle>
+              <circle id="gaugeProgressRing" class="gauge-ring ring-extreme" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="39.58"></circle>
+            </svg>
+            <div class="gauge-center-content">
+              <span class="score-number" id="riskScoreVal">84</span>
+              <span class="score-denominator">/ 100 RISK</span>
+            </div>
+          </div>
+          
+          <div class="score-resilience-box">
+            <div class="resilience-label"><i class="fa-solid fa-heart-pulse"></i> RESILIENCE CAPACITY</div>
+            <div class="resilience-val" id="resilienceVal">16 / 100</div>
+            <div class="resilience-rating" id="resilienceRating">Critical Deficit</div>
+            <div class="resilience-subtext">Click card for MCDA formula popup</div>
+          </div>
+        </div>
+
+        <!-- MCDA 4-Component Progress Bars -->
+        <div class="mcda-breakdown">
+          <!-- 1. Thermal Hazard (35%) -->
+          <div class="mcda-item">
+            <div class="mcda-head">
+              <span class="mcda-title"><i class="fa-solid fa-temperature-high color-heat"></i> Thermal Hazard (35%)</span>
+              <strong id="ptsHeat" class="mcda-pts">28.8 pts</strong>
+            </div>
+            <div class="progress-track"><div id="progHeat" class="progress-fill heat" style="width: 82%;"></div></div>
+            <div class="mcda-meta-row">
+              <span>Landsat 8/9 TIRS Band 10 Inversion</span>
+              <span id="metaHeatVal">37.8&deg;C Observed</span>
+            </div>
+          </div>
+
+          <!-- 2. Vegetation Deficit (25%) -->
+          <div class="mcda-item">
+            <div class="mcda-head">
+              <span class="mcda-title"><i class="fa-solid fa-leaf color-veg"></i> Vegetation Deficit (25%)</span>
+              <strong id="ptsVeg" class="mcda-pts">20.0 pts</strong>
+            </div>
+            <div class="progress-track"><div id="progVeg" class="progress-fill veg" style="width: 80%;"></div></div>
+            <div class="mcda-meta-row">
+              <span>Sentinel-2 NDVI Deficit vs WHO Standard</span>
+              <span id="metaVegVal">NDVI: 0.14</span>
+            </div>
+          </div>
+
+          <!-- 3. Urban Density (20%) -->
+          <div class="mcda-item">
+            <div class="mcda-head">
+              <span class="mcda-title"><i class="fa-solid fa-building-circle-exclamation color-urban"></i> Urban Density (20%)</span>
+              <strong id="ptsDensity" class="mcda-pts">16.2 pts</strong>
+            </div>
+            <div class="progress-track"><div id="progDensity" class="progress-fill density" style="width: 81%;"></div></div>
+            <div class="mcda-meta-row">
+              <span>Impermeable concrete &amp; tin roof coverage</span>
+              <span id="metaDensityVal">Built-up: 68.4%</span>
+            </div>
+          </div>
+
+          <!-- 4. Population Exposure (20%) -->
+          <div class="mcda-item">
+            <div class="mcda-head">
+              <span class="mcda-title"><i class="fa-solid fa-users color-pop"></i> Population Exposure (20%)</span>
+              <strong id="ptsPop" class="mcda-pts">17.2 pts</strong>
+            </div>
+            <div class="progress-track"><div id="progPop" class="progress-fill pop" style="width: 86%;"></div></div>
+            <div class="mcda-meta-row">
+              <span>WorldPop 100m Gridded Density Index</span>
+              <span id="metaPopVal">30,232 /km²</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mcda-formula-callout">
+          <i class="fa-solid fa-square-root-variable text-cyan"></i>
+          <span><strong>MCDA:</strong> R = 0.35&times;Thermal + 0.25&times;Vegetation + 0.20&times;Density + 0.20&times;Population</span>
+        </div>
+      </div>
+
+      <!-- 4. IMPROVED AI CLIMATE RECOMMENDATION PANEL -->
+      <div class="analysis-card recommendation-card hud-card">
+        <div class="card-title-row">
+          <div class="card-title">
+            <i class="fa-solid fa-wand-magic-sparkles text-cyan"></i> SATELLITE-DERIVED RESILIENCE ACTIONS
+          </div>
+          <button id="btnSimulateFromRec" class="btn-micro-info" title="Launch Future Scenario Simulator">
+            <i class="fa-solid fa-sliders"></i> Simulator
+          </button>
+        </div>
+        
+        <div class="rec-sector-context">
+          <span>SECTOR TARGET: <strong id="recAreaName">Khulna Sadar</strong></span>
+          <span class="badge-mini text-alert" id="recAreaTier">Extreme UHI Vulnerability</span>
+        </div>
+
+        <div class="ai-recommendations-list">
+          <!-- Priority 1 -->
+          <div class="rec-action-item priority-1">
+            <div class="rec-action-header">
+              <div class="rec-title-group">
+                <span class="rec-priority-badge p1">Priority 1</span>
+                <strong><i class="fa-solid fa-brush"></i> Cool Roof Deployment</strong>
+              </div>
+              <span class="impact-chip cooling"><i class="fa-solid fa-temperature-arrow-down"></i> -1.8&deg;C Cooling</span>
+            </div>
+            <p class="rec-reason"><strong>Why:</strong> Low-albedo corrugated tin roofing (&alpha; &asymp; 0.15) acts as an acute heat trap under intense tropical insolation. Coating roofs with reflective elastomeric paint (&alpha; &gt; 0.75) mitigates daytime heat accumulation and cuts indoor heat stress.</p>
+            <div class="rec-action-footer">
+              <button class="btn-card-action" id="btnActionCoolRoofs"><i class="fa-solid fa-sliders"></i> Simulate 40% Cool Roofs</button>
+            </div>
+          </div>
+
+          <!-- Priority 2 -->
+          <div class="rec-action-item priority-2">
+            <div class="rec-action-header">
+              <div class="rec-title-group">
+                <span class="rec-priority-badge p2">Priority 2</span>
+                <strong><i class="fa-solid fa-tree"></i> Urban Tree Canopy Corridor</strong>
+              </div>
+              <span class="impact-chip canopy"><i class="fa-solid fa-arrow-up"></i> +0.08 NDVI Boost</span>
+            </div>
+            <p class="rec-reason"><strong>Why:</strong> Canopy coverage has dropped to 14.2% (NDVI 0.14, 33.9% deficit vs WHO standards). Planting native mangrove-adjacent street trees along bus terminal verges and road corridors restores natural evaporative cooling corridors.</p>
+            <div class="rec-action-footer">
+              <button class="btn-card-action" id="btnActionCanopy"><i class="fa-solid fa-sliders"></i> Simulate 4,500 Trees</button>
+            </div>
+          </div>
+
+          <!-- Priority 3 -->
+          <div class="rec-action-item priority-3">
+            <div class="rec-action-header">
+              <div class="rec-title-group">
+                <span class="rec-priority-badge p3">Priority 3</span>
+                <strong><i class="fa-solid fa-water"></i> Wetland &amp; Tidal Canal Protection</strong>
+              </div>
+              <span class="impact-chip wetland"><i class="fa-solid fa-shield"></i> -1.2&deg;C Breeze Buffer</span>
+            </div>
+            <p class="rec-reason"><strong>Why:</strong> Enforcing 50-meter conservation buffers around Mayur and Bhairab tidal retention channels prevents landfill infill, preserves convective breezes providing natural microclimate cooling, and attenuates monsoon flood runoff.</p>
+            <div class="rec-action-footer">
+              <button class="btn-card-action" id="btnActionWetland"><i class="fa-solid fa-sliders"></i> Enable Tidal Protection</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DECADAL CLIMATE IMPACT HIGHLIGHTS (2015 vs 2026) -->
+      <div class="analysis-card decadal-impact-card hud-card">
+        <div class="card-title">
+          <i class="fa-solid fa-chart-line-up color-cyan"></i> DECADAL CLIMATE IMPACT SHIFT (2015 &rarr; 2026)
+        </div>
+        <div class="decadal-shift-grid">
+          <div class="shift-chip temp">
+            <span class="shift-label">TEMPERATURE</span>
+            <strong class="shift-val text-alert" id="shiftValTemp">&uarr; +4.9&deg;C</strong>
+            <span class="shift-meta" id="shiftMetaTemp">31.2&deg;C &rarr; 36.1&deg;C</span>
+          </div>
+          <div class="shift-chip canopy">
+            <span class="shift-label">VEGETATION</span>
+            <strong class="shift-val text-alert" id="shiftValVeg">&darr; &minus;28.4%</strong>
+            <span class="shift-meta" id="shiftMetaVeg">52.4% &rarr; 24.0%</span>
+          </div>
+          <div class="shift-chip urban">
+            <span class="shift-label">URBANIZATION</span>
+            <strong class="shift-val text-amber" id="shiftValUrban">&uarr; +32.1%</strong>
+            <span class="shift-meta" id="shiftMetaUrban">32.1% &rarr; 64.2%</span>
+          </div>
+          <div class="shift-chip river">
+            <span class="shift-label">RIVER BUFFER</span>
+            <strong class="shift-val text-cyan" id="shiftValRiver">&minus;1.8&deg;C</strong>
+            <span class="shift-meta" id="shiftMetaRiver">Bhairab Tidal Cooling</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELTA CLIMATE STORYTELLING CARD -->
+      <div class="analysis-card delta-story-card hud-card">
+        <div class="card-title">
+          <i class="fa-solid fa-newspaper color-cyan"></i> DELTA VULNERABILITY CONTEXT
+        </div>
+        <div id="dynamicStoryText" class="story-body">
+          <p class="story-lead"><strong>Khulna Estuary Reality:</strong></p>
+          <p>Situated in the lower Ganges-Brahmaputra-Meghna delta at just 3.5m above sea level, Khulna experiences compound climate hazards: rising tidal salinity from the Bay of Bengal, canal encroachment, and severe thermal trapping caused by low-elevation tin-roof infill along historic canal banks.</p>
+        </div>
+        <button id="btnReadFullDossier" class="btn-read-dossier">
+          <i class="fa-solid fa-book-open"></i> Read Full Mission Briefing &amp; Climate Dossier
+        </button>
+      </div>
+
+      <!-- DOWNLOAD & EXPORT SUITE -->
+      <div class="analysis-card export-card hud-card">
+        <div class="card-title">
+          <i class="fa-solid fa-download color-cyan"></i> SCIENTIFIC EXPORT SUITE
+        </div>
+        <div class="export-grid">
+          <button id="btnExportPdf" class="btn-export primary" title="Generate Executive Environmental Intelligence PDF">
+            <i class="fa-solid fa-file-pdf"></i> Environmental Report (PDF)
+          </button>
+          <button id="btnExportCsv" class="btn-export" title="Export Annual Decadal Indicators (2015-2026)">
+            <i class="fa-solid fa-file-csv"></i> Timeseries Data (CSV)
+          </button>
+          <button id="btnExportHeatPng" class="btn-export" title="Render High-Res Heat Map Snapshot">
+            <i class="fa-solid fa-file-image"></i> Thermal Heat Map (PNG)
+          </button>
+          <button id="btnExportNdviPng" class="btn-export" title="Render High-Res Canopy Map Snapshot">
+            <i class="fa-solid fa-file-image"></i> Canopy Health Map (PNG)
+          </button>
+          <button id="btnExportGeotiff" class="btn-export" title="Download Georeferenced LST GeoTIFF Raster">
+            <i class="fa-solid fa-map"></i> GeoTIFF Raster (.tif)
+          </button>
+          <button id="btnExportKml" class="btn-export" title="Export 3D Google Earth Pro Spatial Model">
+            <i class="fa-solid fa-globe"></i> Google Earth Pro 3D (KML)
+          </button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- BOTTOM PANE: HISTORICAL DECADAL TIMELINE SLIDER -->
+  <footer class="timeline-footer">
+    <div class="timeline-controls">
+      <button id="btnPlayPause" class="btn-play">
+        <i class="fa-solid fa-play"></i> Play Decadal Animation
+      </button>
+      <div class="timeline-status-wrap">
+        <span class="timeline-status-badge"><i class="fa-solid fa-clock-rotate-left"></i> DECADAL SATELLITE CHRONOLOGY</span>
+        <span class="timeline-subtext">Observe 11 continuous years of satellite-measured urban microclimate transformation (2015 &rarr; 2026)</span>
+      </div>
+    </div>
+    
+    <div class="slider-wrapper">
+      <span class="timeline-year-label baseline-tag">2015 BASELINE</span>
+      <input type="range" id="timelineSlider" min="2015" max="2026" step="1" value="2026" class="timeline-slider">
+      <span class="timeline-year-label current-tag">2026 CURRENT</span>
+    </div>
+
+    <div class="timeline-milestones">
+      <span class="year-tick" data-year="2015">2015 (Landsat 8 Baseline)</span>
+      <span class="year-tick" data-year="2017">2017</span>
+      <span class="year-tick" data-year="2019">2019</span>
+      <span class="year-tick" data-year="2021">2021 (Landsat 9 Launch)</span>
+      <span class="year-tick" data-year="2023">2023</span>
+      <span class="year-tick active" data-year="2026">2026 (Operational Current)</span>
+    </div>
+  </footer>
+
+  <!-- 5. MCDA CLIMATE RISK EXPLANATION POPUP MODAL -->
+  <div id="riskExplainModal" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-classification"><i class="fa-solid fa-shield-halved text-cyan"></i> SCIENTIFIC METHODOLOGY &bull; MCDA ENGINE</span>
+          <h2>MCDA Climate Risk Score Explanation</h2>
+          <p class="modal-sub">Multi-Criteria Decision Analysis (MCDA) grounded in empirical NASA &amp; European Earth Observations</p>
+        </div>
+        <button id="btnCloseRiskExplain" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="math-formula-banner">
+          <div class="formula-label">COMPOSITE CLIMATE RESILIENCE FORMULATION (0 &ndash; 100)</div>
+          <div class="formula-latex">R<sub>composite</sub> = 0.35 &times; Thermal Hazard + 0.25 &times; Vegetation Deficit + 0.20 &times; Urban Density + 0.20 &times; Population Exposure</div>
+          <p class="formula-desc">Where each dimension is normalized from satellite-derived physical observables (0 = optimal resilience, 100 = extreme vulnerability).</p>
+        </div>
+
+        <div class="methodology-grid">
+          <div class="method-card">
+            <div class="method-card-header">
+              <span class="weight-badge heat">35% WEIGHT</span>
+              <h4><i class="fa-solid fa-temperature-high color-heat"></i> Thermal Hazard (35%)</h4>
+            </div>
+            <div class="method-source">Sensor: Landsat 8/9 TIRS Band 10 (10.895 µm)</div>
+            <p>Calculates surface thermal stress above physiological thresholds. Temperatures &le;30.0&deg;C score 0 pts; temperatures &ge;38.5&deg;C hit maximum 100 pts.</p>
+            <div class="formula-snippet">H = min(100, max(0, ((LST &minus; 30.0) / 8.5) &times; 100))</div>
+          </div>
+
+          <div class="method-card">
+            <div class="method-card-header">
+              <span class="weight-badge veg">25% WEIGHT</span>
+              <h4><i class="fa-solid fa-leaf color-veg"></i> Vegetation Deficit (25%)</h4>
+            </div>
+            <div class="method-source">Sensor: Copernicus Sentinel-2 MSI Level-2A (10m)</div>
+            <p>Quantifies urban vegetative deficit relative to the World Health Organization (WHO) minimum standard of 9.0 m² of accessible green space per capita.</p>
+            <div class="formula-snippet">V = min(100, max(0, ((0.65 &minus; NDVI) / 0.55) &times; 100))</div>
+          </div>
+
+          <div class="method-card">
+            <div class="method-card-header">
+              <span class="weight-badge urban">20% WEIGHT</span>
+              <h4><i class="fa-solid fa-city color-urban"></i> Urban Density (20%)</h4>
+            </div>
+            <div class="method-source">Sensor: Sentinel-2 &amp; Landsat Decadal Classification</div>
+            <p>Measures impermeable surface fraction (corrugated tin roofs, concrete, asphalt) that prevents soil infiltration and absorbs daytime solar radiation.</p>
+            <div class="formula-snippet">D = Built-Up Percentage (0 &ndash; 100%)</div>
+          </div>
+
+          <div class="method-card">
+            <div class="method-card-header">
+              <span class="weight-badge pop">20% WEIGHT</span>
+              <h4><i class="fa-solid fa-users color-pop"></i> Population Exposure (20%)</h4>
+            </div>
+            <div class="method-source">Dataset: WorldPop 100m Gridded Density Index</div>
+            <p>Normalizes residential and commercial population exposure to thermal hazard. Sectors with &gt;35,000 residents/km² reach maximum vulnerability weighting.</p>
+            <div class="formula-snippet">P = min(100, (Population Density / 35,000) &times; 100)</div>
+          </div>
+        </div>
+
+        <div class="active-audit-card">
+          <div class="audit-title"><i class="fa-solid fa-calculator text-cyan"></i> LIVE OBSERVABLE AUDIT: <span id="auditSectorName">Khulna Sadar</span></div>
+          <table class="audit-table">
+            <thead>
+              <tr>
+                <th>Factor</th>
+                <th>Sensor Observable</th>
+                <th>Raw Value</th>
+                <th>Normalized (0-100)</th>
+                <th>Weight</th>
+                <th>Contribution</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <tr>
+                <td>Thermal Hazard</td>
+                <td>Landsat 8/9 TIRS Band 10</td>
+                <td>37.8&deg;C</td>
+                <td>82.4%</td>
+                <td>35%</td>
+                <td class="text-cyan">28.8 pts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="simple-explanation-box">
+          <i class="fa-solid fa-circle-info text-cyan"></i>
+          <div>
+            <strong>Why this score?</strong>
+            <p>Low-elevation corrugated galvanized iron roofs act as heat sinks under tropical solar insolation, driving daytime Land Surface Temperatures to an acute 37.8°C. Combined with a 33.9% green canopy deficit in this dense residential core, the sector scores 84/100 (Extreme Risk).</p>
+          </div>
+        </div>
+
+        <div class="tiers-table-card">
+          <h4>MCDA CLIMATE RESILIENCE SEVERITY TIERS</h4>
+          <div class="tier-matrix">
+            <div class="tier-col extreme">
+              <strong>Extreme Risk (80&ndash;100)</strong>
+              <span>Immediate heat crisis. Acute nocturnal trapping and severe canopy deficit.</span>
+            </div>
+            <div class="tier-col high">
+              <strong>High Risk (65&ndash;79)</strong>
+              <span>Elevated UHI vulnerability. Impervious coverage exceeding 60%.</span>
+            </div>
+            <div class="tier-col moderate">
+              <strong>Moderate Risk (50&ndash;64)</strong>
+              <span>Intermediate thermal hazard mitigated by partial green setbacks.</span>
+            </div>
+            <div class="tier-col resilient">
+              <strong>Resilient (&lt;50)</strong>
+              <span>Ecologically buffered deltaic plain with viable wetland channels.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-footer-credit">NASA Space Apps Challenge 2026 &bull; Peer-Reviewed Remote Sensing Standards</span>
+        <button id="btnCloseRiskExplainAction" class="btn-nasa-primary">Close Explanation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUTURE SCENARIO SIMULATOR MODAL -->
+  <div id="simulatorModal" class="modal-backdrop hidden">
+    <div class="modal-dialog sim-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-classification"><i class="fa-solid fa-wand-magic-sparkles text-cyan"></i> MUNICIPAL DECISION SUPPORT &bull; SCENARIO ENGINE</span>
+          <h2>Future Scenario Simulator</h2>
+          <p class="modal-sub">Interactive policy scenario modeling for urban climate resilience planning</p>
+        </div>
+        <button id="btnCloseSimulator" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body sim-body-grid">
+        <div class="sim-controls-pane">
+          <div class="sim-pane-title"><i class="fa-solid fa-sliders text-cyan"></i> SCENARIO INPUTS</div>
+          
+          <div class="sim-slider-card">
+            <div class="sim-slider-head">
+              <span class="sim-lever-name"><i class="fa-solid fa-tree color-veg"></i> Tree Plantation</span>
+              <strong id="simTreeVal" class="sim-lever-val">4,500 trees</strong>
+            </div>
+            <input type="range" id="simTreeSlider" min="0" max="10000" step="250" value="4500" class="range-slider">
+            <span class="sim-lever-desc">Plant native mangrove-adjacent shade trees along transit corridors (0 &ndash; 10,000 trees).</span>
+          </div>
+
+          <div class="sim-slider-card">
+            <div class="sim-slider-head">
+              <span class="sim-lever-name"><i class="fa-solid fa-brush color-cyan"></i> Cool Roof Coverage</span>
+              <strong id="simCoolRoofVal" class="sim-lever-val">40%</strong>
+            </div>
+            <input type="range" id="simCoolRoofSlider" min="0" max="100" step="5" value="40" class="range-slider">
+            <span class="sim-lever-desc">Coat corrugated galvanized tin and flat commercial roofs with elastomeric high-albedo paint (&alpha; &gt; 0.75).</span>
+          </div>
+
+          <div class="sim-slider-card">
+            <div class="sim-slider-head">
+              <span class="sim-lever-name"><i class="fa-solid fa-water color-heat"></i> Wetland Restoration</span>
+              <button id="simWetlandToggle" class="btn-toggle-switch active">
+                <span class="switch-indicator"></span>
+                <span id="simWetlandStatusText">Enabled</span>
+              </button>
+            </div>
+            <span class="sim-lever-desc">Enforce 50m tidal setbacks around Mayur and Bhairab channels to preserve convective breezes.</span>
+          </div>
+
+          <div class="scenario-disclaimer">
+            <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+            <span><strong>Scenario estimation &mdash; Not real prediction.</strong> Results represent physical microclimate approximations for planning screening.</span>
+          </div>
+
+          <div class="sim-actions-row">
+            <button id="btnResetSimulator" class="btn-micro" title="Reset all inputs to baseline">Reset</button>
+            <button id="btnApplySimToDashboard" class="btn-nasa-hud active" title="Apply estimated improvement to main HUD">
+              <i class="fa-solid fa-chart-line"></i> Apply to Main HUD
+            </button>
+          </div>
+        </div>
+
+        <div class="sim-results-pane">
+          <div class="sim-pane-title"><i class="fa-solid fa-gauge-high text-cyan"></i> ESTIMATED IMPROVEMENT</div>
+          
+          <div class="sim-kpi-grid">
+            <div class="sim-kpi-box highlight">
+              <span class="sim-kpi-label">SURFACE TEMPERATURE</span>
+              <div class="sim-improvement-flow">
+                <span class="flow-base" id="simBaseTemp">37.8&deg;C</span>
+                <span class="flow-arrow">&darr;</span>
+                <strong class="flow-sim text-green" id="simNewTemp">35.3&deg;C</strong>
+              </div>
+              <span class="sim-kpi-sub text-green" id="simDeltaTemp">&minus;2.5&deg;C Estimated Cooling</span>
+            </div>
+
+            <div class="sim-kpi-box highlight">
+              <span class="sim-kpi-label">VEGETATION INDEX</span>
+              <div class="sim-improvement-flow">
+                <span class="flow-base" id="simBaseNdvi">0.14</span>
+                <span class="flow-arrow">&uarr;</span>
+                <strong class="flow-sim text-green" id="simNewNdvi">0.23</strong>
+              </div>
+              <span class="sim-kpi-sub text-green" id="simDeltaNdvi">+0.09 NDVI Boost</span>
+            </div>
+
+            <div class="sim-kpi-box highlight" style="grid-column: span 2;">
+              <span class="sim-kpi-label">CLIMATE RISK SCORE</span>
+              <div class="sim-improvement-flow">
+                <span class="flow-base" id="simBaseRisk">84 / 100</span>
+                <span class="flow-arrow">&darr;</span>
+                <strong class="flow-sim text-cyan" id="simNewRisk">68 / 100</strong>
+              </div>
+              <span class="sim-kpi-sub text-cyan" id="simDeltaRisk">&minus;16 pts (Downgraded to High Risk)</span>
+            </div>
+          </div>
+
+          <div class="sim-breakdown-card">
+            <h4>COOLING SOURCE BREAKDOWN</h4>
+            <div class="sim-attr-row">
+              <span>Tree Plantation:</span>
+              <strong id="attrTrees">&minus;0.81&deg;C</strong>
+            </div>
+            <div class="sim-attr-row">
+              <span>Cool Roofs:</span>
+              <strong id="attrCoolRoofs">&minus;1.28&deg;C</strong>
+            </div>
+            <div class="sim-attr-row">
+              <span>Wetland Restoration:</span>
+              <strong id="attrWetland">&minus;0.45&deg;C</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-footer-credit">Physical Microclimate Model &bull; EnergyPlus / Sobrino Urban Radiation Formulations</span>
+        <button id="btnCloseSimulatorAction" class="btn-nasa-primary">Close Simulator</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENTIFIC DATA & METHODOLOGY CREDIBILITY MODAL -->
+  <div id="credibilityModal" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-classification"><i class="fa-solid fa-award text-cyan"></i> DATA CREDIBILITY &bull; SCIENTIFIC GROUNDING</span>
+          <h2>Scientific Data &amp; Methodology Dossier</h2>
+          <p class="modal-sub">Empirical multi-sensor Earth Observation provenance and transparent scoring specifications</p>
+        </div>
+        <button id="btnCloseCredibility" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="credibility-section">
+          <div class="cred-section-title"><i class="fa-solid fa-satellite text-cyan"></i> 1. SATELLITE SOURCES &amp; SENSORS</div>
+          <div class="cred-grid">
+            <div class="cred-card">
+              <strong>NASA Landsat 8/9 TIRS (Band 10)</strong>
+              <span>Spatial: 30m (resampled) | Temporal: 16-day repeat</span>
+              <p>Measures top-of-atmosphere thermal infrared radiometry (10.895 &micro;m). Calibrated via Planck's Law inversion and Sobrino NDVI threshold emissivity modeling.</p>
+            </div>
+            <div class="cred-card">
+              <strong>Copernicus Sentinel-2 MSI (Level-2A)</strong>
+              <span>Spatial: 10m Ground Res | Temporal: 5-day revisit</span>
+              <p>Level-2A Bottom-of-Atmosphere (BOA) surface reflectance in Red (B4: 665nm) and NIR (B8: 842nm) delivering Fractional Vegetation Cover ($P_v$).</p>
+            </div>
+            <div class="cred-card">
+              <strong>NASA Terra/Aqua MODIS (MOD11A2 / MOD13Q1)</strong>
+              <span>Spatial: 1,000m / 250m | Temporal: 8-day / 16-day composite</span>
+              <p>Provides regional climatological validation baselines across continuous decadal time-series (2015&ndash;2026).</p>
+            </div>
+            <div class="cred-card">
+              <strong>WorldPop Global High-Resolution Index</strong>
+              <span>Spatial: 100m Gridded Density | Census: Annual</span>
+              <p>Gridded residential population exposure derived from census microdata, building footprints, and machine-learning dasymetric mapping.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="credibility-section" style="margin-top: 14px;">
+          <div class="cred-section-title"><i class="fa-solid fa-chart-line text-cyan"></i> 2. ENVIRONMENTAL INDICATORS</div>
+          <div class="indices-grid">
+            <div class="index-item">
+              <strong>LST</strong>
+              <span>Land Surface Temperature</span>
+              <small>Calibrated radiometric temperature (&deg;C) tracking acute Urban Heat Island intensity.</small>
+            </div>
+            <div class="index-item">
+              <strong>NDVI</strong>
+              <span>(NIR &minus; Red) / (NIR + Red)</span>
+              <small>Normalized Difference Vegetation Index tracking live green canopy health.</small>
+            </div>
+            <div class="index-item">
+              <strong>NDBI</strong>
+              <span>(SWIR &minus; NIR) / (SWIR + NIR)</span>
+              <small>Normalized Difference Built-Up Index identifying impervious concrete &amp; tin roofing.</small>
+            </div>
+            <div class="index-item">
+              <strong>MNDWI</strong>
+              <span>(Green &minus; SWIR) / (Green + SWIR)</span>
+              <small>Modified Normalized Difference Water Index delineating tidal retention canals.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="credibility-section" style="margin-top: 14px;">
+          <div class="cred-section-title"><i class="fa-solid fa-shield-halved text-cyan"></i> 3. MULTI-CRITERIA RISK MODEL (MCDA)</div>
+          <div class="math-formula-banner">
+            <div class="formula-latex">R = 0.35 &times; Thermal Hazard + 0.25 &times; Vegetation Deficit + 0.20 &times; Urban Density + 0.20 &times; Population Exposure</div>
+            <p class="formula-desc">All factors are scaled to a transparent 0&ndash;100 vulnerability index with peer-reviewed weighting benchmarks.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-footer-credit">NASA Space Apps Challenge 2026 &bull; Verified Scientific Provenance</span>
+        <button id="btnCloseCredibilityAction" class="btn-nasa-primary">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSION BRIEFING & DELTA STORY MODAL -->
+  <div id="storyModal" class="modal-backdrop hidden">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-classification"><i class="fa-solid fa-satellite text-cyan"></i> NASA SPACE APPS 2026 &bull; MISSION DOSSIER</span>
+          <h2>SURF: Satellite Urban Resilience Framework</h2>
+          <p class="modal-sub">Translating NASA &amp; European Earth Observations into Actionable Climate Resilience for Coastal River Deltas</p>
+        </div>
+        <button id="btnCloseStory" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="story-chapter-card">
+          <div class="chapter-num">CHAPTER 01</div>
+          <h3>The Delta Crisis: Ground Zero in Southwest Bangladesh</h3>
+          <p>The Ganges-Brahmaputra-Meghna delta is one of the most ecologically fragile and climate-vulnerable landscapes on Earth. <strong>Khulna</strong>, the divisional metropolis of southwestern Bangladesh, rests on the tidal banks of the Bhairab and Rupsha rivers at an average elevation of merely <strong>3.5 meters</strong> above sea level.</p>
+          <p>Over the past decade (2015&ndash;2026), accelerated migration driven by coastal sea-level rise and cyclone displacement has triggered unzoned urban infill. Vegetated wetlands and historic tidal retention khals (canals) have been filled to accommodate low-cost settlements constructed from corrugated galvanized iron (tin) roofs and dense masonry.</p>
+        </div>
+
+        <div class="story-chapter-card">
+          <div class="chapter-num">CHAPTER 02</div>
+          <h3>The Microclimate Amplification: Heat Islands &amp; Canopy Loss</h3>
+          <p>Unlike temperate cities with insulated roofing, tropical deltaic informal settlements rely heavily on corrugated iron sheeting with very high solar absorptance and low thermal mass. Satellite radiometry reveals a stark reality:</p>
+          <div class="story-stats-grid">
+            <div class="story-stat-box">
+              <span class="stat-number text-alert">+4.9&deg;C</span>
+              <span class="stat-desc">Decadal LST Increase (2015&ndash;2026)</span>
+            </div>
+            <div class="story-stat-box">
+              <span class="stat-number text-alert">&minus;28.4%</span>
+              <span class="stat-desc">Net Canopy Depletion</span>
+            </div>
+            <div class="story-stat-box">
+              <span class="stat-number text-amber">+100%</span>
+              <span class="stat-desc">Impervious Surface Expansion</span>
+            </div>
+            <div class="story-stat-box">
+              <span class="stat-number text-cyan">1.8&deg;C</span>
+              <span class="stat-desc">River Cooling Buffer Effect</span>
+            </div>
+          </div>
+          <p>During dry season pre-monsoon months (April&ndash;June), daytime Land Surface Temperatures in Khulna Sadar and Khalishpur regularly surge beyond <strong>38&deg;C</strong>, creating dangerous physiological thermal strain for vulnerable outdoor laborers and dense informal communities.</p>
+        </div>
+
+        <div class="story-chapter-card">
+          <div class="chapter-num">CHAPTER 03</div>
+          <h3>The Earth Observation Solution: Multi-Sensor Grounding</h3>
+          <p>Municipal urban planning in developing nations has historically operated blind to microclimate physics due to lack of ground station density. <strong>SURF</strong> bridges this gap by unifying open Earth Observation data streams into a single decision-support platform:</p>
+          <ul class="story-feature-list">
+            <li><strong>Landsat 8/9 TIRS (Band 10):</strong> Radiometric calibration and Sobrino NDVI threshold emissivity modeling delivers 30m Land Surface Temperature.</li>
+            <li><strong>Copernicus Sentinel-2 MSI:</strong> 10m spatial resolution Red &amp; NIR bands provide Fractional Vegetation Cover ($P_v$) and canopy deficit analysis.</li>
+            <li><strong>Terra/Aqua MODIS:</strong> Validates 8-day composite climatological thermal baselines across 11 continuous years.</li>
+            <li><strong>Transparent Multi-Criteria Decision Analysis (MCDA):</strong> Eliminates arbitrary scoring by weighting Thermal Hazard (35%), Canopy Deficit (25%), Impervious Density (20%), and Gridded Population Exposure (20%).</li>
+          </ul>
+        </div>
+
+        <div class="story-chapter-card">
+          <div class="chapter-num">CHAPTER 04</div>
+          <h3>Actionable Interventions for Municipal Planners</h3>
+          <p>SURF does not merely diagnose problems; it computes targeted, satellite-grounded solutions for municipal authorities like Khulna City Corporation (KCC):</p>
+          <div class="story-intervention-grid">
+            <div class="intervention-box">
+              <h4><i class="fa-solid fa-brush text-cyan"></i> High-Albedo Cool Roof Retrofits</h4>
+              <p>Applying elastomeric reflective white coatings to corrugated tin roofs increases surface albedo from 0.15 to &gt;0.75, modeled to drop indoor temperatures by up to 3.5&deg;C and sector LST by 1.8&deg;C.</p>
+            </div>
+            <div class="intervention-box">
+              <h4><i class="fa-solid fa-tree text-green"></i> Linear Canopy Bioswales</h4>
+              <p>Targeting barren transportation spines and riverfronts with native mangrove-adjacent trees restores evaporative cooling corridors where NDVI is currently below 0.15.</p>
+            </div>
+            <div class="intervention-box">
+              <h4><i class="fa-solid fa-water text-cyan"></i> Tidal Canal Retention Buffers</h4>
+              <p>Enforcing 50-meter buffer protection around Mayur and Bhairab tidal channels preserves convective breeze corridors that naturally cool adjacent sectors.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="modal-footer-credit">NASA Space Apps Challenge 2026 &bull; Earth Science Division &bull; Open Source Initiative</span>
+        <button id="btnModalCloseAction" class="btn-nasa-primary">Close Mission Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet & Leaflet Heat Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <!-- Application JS -->
+  <script src="app.js?v=2026.5.0"></script>
+</body>
+</html>
